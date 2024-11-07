@@ -3,10 +3,14 @@ package com.mthree.trustBank.TrustBank.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "employees_application_account")
 public class Employee {
+    @Setter
+    @Getter
     @Id
     @Column(name = "id_employees_application_account")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,29 +18,23 @@ public class Employee {
 
     @Email
     @NotEmpty(message = "Email cannot be empty")
-    @Column(name = "email")
-    private String email;
+    @Column(name = "username")
+    private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     @Column(name = "password")
     private String password;
 
+    @Getter
+    @Setter
     private int accountType = 2;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public @Email @NotEmpty(message = "Email cannot be empty") String getEmail() {
-        return email;
+    public @Email @NotEmpty(message = "Email cannot be empty") String getUsername() {
+        return username;
     }
 
     public void setEmail(@Email @NotEmpty(message = "Email cannot be empty") String email) {
-        this.email = email;
+        this.username = username;
     }
 
     public @NotEmpty(message = "Password cannot be empty") String getPassword() {
@@ -47,11 +45,4 @@ public class Employee {
         this.password = password;
     }
 
-    public int getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(int accountType) {
-        this.accountType = accountType;
-    }
 }
