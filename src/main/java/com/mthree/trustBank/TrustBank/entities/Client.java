@@ -4,11 +4,13 @@ package com.mthree.trustBank.TrustBank.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Setter
 @Getter
@@ -17,8 +19,8 @@ import java.util.Date;
 public class Client {
     @Id
     @Column(name = "client_id")
-    @GeneratedValue
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @NotEmpty(message = "First name cannot be empty")
     @Column(name = "first_name")
@@ -28,10 +30,7 @@ public class Client {
     @Column(name = "last_name")
     private String last_name;
 
-
     @Column(name = "date_of_birthday")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotEmpty
     private Date date_of_birthday;
 
     @NotEmpty(message = "Phone number cannot be empty")

@@ -1,7 +1,6 @@
 package com.mthree.trustBank.TrustBank.config;
 
 import com.mthree.trustBank.TrustBank.services.employeeService.EmployeeDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,15 +24,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth // Используем новый метод authorizeHttpRequests
-                        .anyRequest().authenticated() // Все запросы требуют аутентификации
-                )
-                .formLogin(form -> form // Используем новый метод для настройки formLogin
-                        .permitAll() // Дает доступ к форме логина для всех
-                );
-
+    public SecurityFilterChain securityFilterChainEmployee(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth.requestMatchers("/login_employee")
+                .permitAll()
+                .anyRequest().authenticated())
+                .formLogin( form -> form
+                        .loginPage("/login_employee")
+                        .loginProcessingUrl("/login_employee")
+                        .defaultSuccessUrl("/dashboard", true) // Correct URL
+                        .permitAll())
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login_employee")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
         return http.build();
     }
 

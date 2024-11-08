@@ -1,6 +1,6 @@
 package com.mthree.trustBank.TrustBank.services.employeeService;
 
-import com.mthree.trustBank.TrustBank.models.Employee;
+import com.mthree.trustBank.TrustBank.entities.EmployeeApplicationAccount;
 import com.mthree.trustBank.TrustBank.repositories.EmployeeRepository;
 import com.mthree.trustBank.TrustBank.security.EmployeeDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class EmployeeDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Employee> employee = employeeRepository.findByUsername(username);
+        Optional<EmployeeApplicationAccount> employee = employeeRepository.findByUsername(username);
         if (employee.isEmpty()){
             throw new UsernameNotFoundException("User not found");
         }
