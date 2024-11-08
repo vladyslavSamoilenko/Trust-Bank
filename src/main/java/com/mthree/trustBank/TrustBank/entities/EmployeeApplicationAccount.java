@@ -1,4 +1,4 @@
-package com.mthree.trustBank.TrustBank.models;
+package com.mthree.trustBank.TrustBank.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -8,7 +8,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "employees_application_account")
-public class Employee {
+@Getter
+@Setter
+public class EmployeeApplicationAccount {
     @Setter
     @Getter
     @Id
@@ -27,22 +29,6 @@ public class Employee {
 
     @Getter
     @Setter
-    private int accountType = 2;
-
-    public @Email @NotEmpty(message = "Email cannot be empty") String getUsername() {
-        return username;
-    }
-
-    public void setEmail(@Email @NotEmpty(message = "Email cannot be empty") String email) {
-        this.username = username;
-    }
-
-    public @NotEmpty(message = "Password cannot be empty") String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@NotEmpty(message = "Password cannot be empty") String password) {
-        this.password = password;
-    }
+    private int accountType;
 
 }

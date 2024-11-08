@@ -1,6 +1,6 @@
 package com.mthree.trustBank.TrustBank.security;
 
-import com.mthree.trustBank.TrustBank.models.Employee;
+import com.mthree.trustBank.TrustBank.entities.EmployeeApplicationAccount;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class EmployeeDetails implements UserDetails {
 
-    private final Employee employee;
+    private final EmployeeApplicationAccount employee;
 
-    public EmployeeDetails(Employee employee) {
+    public EmployeeDetails(EmployeeApplicationAccount employee) {
         this.employee = employee;
     }
 
@@ -51,7 +51,7 @@ public class EmployeeDetails implements UserDetails {
     }
 
     //need to get authenticated user data
-    public Employee getEmployee(){
+    public EmployeeApplicationAccount getEmployee(){
         return this.employee;
     }
 }
