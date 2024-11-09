@@ -11,8 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmployeeApplicationAccount {
-    @Setter
-    @Getter
     @Id
     @Column(name = "id_employees_application_account")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +25,8 @@ public class EmployeeApplicationAccount {
     @Column(name = "password")
     private String password;
 
-    @Getter
-    @Setter
-    private int accountType;
+    @NotEmpty(message = "Account type cannot be empty")
+    @Column(name = "account_type")
+    private String accountType;
 
 }

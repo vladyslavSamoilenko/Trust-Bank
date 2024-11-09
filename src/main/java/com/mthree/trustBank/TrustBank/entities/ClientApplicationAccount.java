@@ -8,9 +8,10 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "clients_application_accounts")
+@Getter
+@Setter
 public class ClientApplicationAccount {
-    @Setter
-    @Getter
+
     @Id
     @Column(name = "id_client")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +19,14 @@ public class ClientApplicationAccount {
 
     @Email
     @NotEmpty(message = "Email cannot be empty")
-    @Column(name = "login")
+    @Column(name = "username")
     private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     @Column(name = "password")
     private String password;
 
-    @Getter
-    @Setter
-    private int accountType = 2;
+    @NotEmpty(message = "Email cannot be empty")
+    @Column(name = "email")
+    private String email;
 }

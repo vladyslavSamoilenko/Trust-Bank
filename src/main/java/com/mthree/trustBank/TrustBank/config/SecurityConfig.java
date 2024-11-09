@@ -52,5 +52,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder getPasswordEncoder(){
         return NoOpPasswordEncoder.getInstance();
+        //TODO:return new BCryptPasswordEncoder();
     }
 }

@@ -1,4 +1,4 @@
-package com.mthree.trustBank.TrustBank.services.employeeService;
+package com.mthree.trustBank.TrustBank.services.clientService;
 
 import com.mthree.trustBank.TrustBank.dto.ClientDTO;
 import com.mthree.trustBank.TrustBank.entities.Client;
