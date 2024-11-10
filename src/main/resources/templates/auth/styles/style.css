@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.auth-box:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.auth-box h2 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.auth-box p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.auth-box a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+.personal_client{
+    width: 10px;
+    height: 10px;
+}
+/* Стили для закрепленного зеленого хедера */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 77.33px;
+    padding: 20px 77.33px;
+    background: darkgreen;
+}
+
+/* Стиль логотипа и текста внутри хедера */
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 85%;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.logo p {
+    font-size: 18px;
+    margin: 0;
+}
