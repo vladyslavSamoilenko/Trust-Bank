@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карты</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h1>Карты</h1>
+<div id="card-list"></div>
+<button onclick="loadCards()">Загрузить карты</button>
+<script>
+    function loadCards() {
+        fetch('/api/cards')
+            .then(response => response.json())
+            .then(data => {
+                const cardList = document.getElementById('card-list');
+                cardList.innerHTML = data.map(card => `
+                        <div>
+                            <h2>Номер карты: ${card.cardNumber}</h2>
+                            <p>Тип карты: ${card.cardType}</p>
+                            <p>Дата окончания: ${card.expirationDate}</p>
+                        </div>
+                    `).join('');
+            })
+            .catch(error => console.error('Ошибка:', error));
+    }
+</script>
+</body>
+</html>

@@ -8,38 +8,34 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "cards")
-public class Card{
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_id")
     private int cardId;
 
-    @NotNull
-    @Column(name = "client_id")
-    private int clientId;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
-    @NotNull
-    @Column(name = "account_id")
-    private int accountId;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private BankAccount account;
 
-    @NotNull
-    @Size(min = 16, max = 16)
-    @Column(name = "card_number", length = 16)
+    @Column(name = "card_number", length = 16, unique = true, nullable = false)
     private String cardNumber;
 
-    @NotNull
-    @Column(name = "card_type")
+    @Column(name = "card_type", nullable = false)
     private int cardType;
 
-    @NotNull
     @Column(name = "expiration_date")
     private Date expirationDate;
 
-    @NotNull
-    @Column(name = "cvv")
-    private byte[] cvv;
+    @Column(name = "cvv", nullable = false)
+    private int cvv;
 
+    // Геттеры и сеттеры
     public int getCardId() {
         return cardId;
     }
@@ -48,55 +44,51 @@ public class Card{
         this.cardId = cardId;
     }
 
-    @NotNull
-    public int getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(@NotNull int clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    @NotNull
-    public int getAccountId() {
-        return accountId;
+    public BankAccount getAccount() {
+        return account;
     }
 
-    public void setAccountId(@NotNull int accountId) {
-        this.accountId = accountId;
+    public void setAccount(BankAccount account) {
+        this.account = account;
     }
 
-    public @NotNull @Size(min = 16, max = 16) String getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(@NotNull @Size(min = 16, max = 16) String cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
-    @NotNull
     public int getCardType() {
         return cardType;
     }
 
-    public void setCardType(@NotNull int cardType) {
+    public void setCardType(int cardType) {
         this.cardType = cardType;
     }
 
-    public @NotNull Date getExpirationDate() {
+    public Date getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(@NotNull Date expirationDate) {
+    public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    @NotNull
-    public byte[] getCvv() {
+    public int getCvv() {
         return cvv;
     }
 
-    public void setCvv(@NotNull byte[] cvv) {
+    public void setCvv(int cvv) {
         this.cvv = cvv;
     }
 }

@@ -8,25 +8,53 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "clients_application_accounts")
-@Getter
-@Setter
 public class ClientApplicationAccount {
 
     @Id
-    @Column(name = "id_client")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id_client")
+    private int clientId;
 
-    @Email
-    @NotEmpty(message = "Email cannot be empty")
-    @Column(name = "username")
+    @Column(name = "username", length = 45, nullable = false)
     private String username;
 
-    @NotEmpty(message = "Password cannot be empty")
-    @Column(name = "password")
+    @Column(name = "password", length = 200, nullable = false)
     private String password;
 
-    @NotEmpty(message = "Email cannot be empty")
-    @Column(name = "email")
-    private String email;
+    @OneToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    private Client client;
+
+    // Геттеры и сеттеры
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }

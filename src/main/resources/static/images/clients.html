@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиенты</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h1>Клиенты</h1>
+<div id="client-list"></div>
+<button onclick="loadClients()">Загрузить клиентов</button>
+<script>
+    function loadClients() {
+        fetch('/api/clients')
+            .then(response => response.json())
+            .then(data => {
+                const clientList = document.getElementById('client-list');
+                clientList.innerHTML = data.map(client => `
+                        <div>
+                            <h2>${client.firstName} ${client.lastName}</h2>
+                            <p>Город: ${client.city}</p>
+                            <p>Email: ${client.email}</p>
+                        </div>
+                    `).join('');
+            })
+            .catch(error => console.error('Ошибка:', error));
+    }
+</script>
+</body>
+</html>

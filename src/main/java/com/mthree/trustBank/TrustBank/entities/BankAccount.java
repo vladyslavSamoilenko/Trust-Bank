@@ -1,36 +1,40 @@
 package com.mthree.trustBank.TrustBank.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
+@Entity
+@Table(name = "accounts")
 public class BankAccount {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private int accountId;
 
-    @NotNull
-    @Column(name = "client_id")
-    private int clientId;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
-    @NotNull
-    @Column(name = "account_type")
+    @Column(name = "account_type", nullable = false)
     private int accountType;
 
-    @NotNull
-    @Column(name = "balance", precision = 10, scale = 2)
+    @Column(name = "balance", precision = 10, scale = 2, nullable = false)
     private BigDecimal balance;
 
-    @NotNull
     @Column(name = "opened_date")
     private Date openedDate;
 
+    @Column(name = "client_type")
+    private int clientType;
+
+    @Column(name = "account_number", length = 26, unique = true, nullable = false)
+    private String accountNumber;
+
+    // Геттеры и сеттеры
     public int getAccountId() {
         return accountId;
     }
@@ -39,63 +43,51 @@ public class BankAccount {
         this.accountId = accountId;
     }
 
-    @NotNull
-    public int getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(@NotNull int clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    @NotNull
     public int getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(@NotNull int accountType) {
+    public void setAccountType(int accountType) {
         this.accountType = accountType;
     }
 
-    public @NotNull BigDecimal getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(@NotNull BigDecimal balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public @NotNull Date getOpenedDate() {
+    public Date getOpenedDate() {
         return openedDate;
     }
 
-    public void setOpenedDate(@NotNull Date openedDate) {
+    public void setOpenedDate(Date openedDate) {
         this.openedDate = openedDate;
     }
 
-    @NotNull
     public int getClientType() {
         return clientType;
     }
 
-    public void setClientType(@NotNull int clientType) {
+    public void setClientType(int clientType) {
         this.clientType = clientType;
     }
 
-    public @NotNull String getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(@NotNull String accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-
-    @NotNull
-    @Column(name = "client_type")
-    private int clientType;
-
-    @NotNull
-    @Column(name = "account_number", length = 26)
-    private String accountNumber;
-
 }

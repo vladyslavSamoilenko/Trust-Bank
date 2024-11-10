@@ -8,28 +8,63 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "employees")
-@Getter
-@Setter
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_employee")
-    private int id_employee;
+    private int employeeId;
 
-    @Column(name = "first_name")
-    @NotEmpty(message = "First name cannot be empty")
-    private String first_name;
+    @Column(name = "first_name", length = 45, nullable = false)
+    private String firstName;
 
-    @Column(name = "last_name")
-    @NotEmpty(message = "Last name cannot be empty")
-    private String last_name;
+    @Column(name = "last_name", length = 45, nullable = false)
+    private String lastName;
 
-    @Column(name = "telephone_number")
-    @NotEmpty(message = "Telephone number cannot be empty")
-    private String telephone_number;
+    @Column(name = "telephone_number", length = 45)
+    private String telephoneNumber;
 
-    @Email
-    @Column(name = "email")
-    @NotEmpty(message = "Email name cannot be empty")
+    @Column(name = "email", length = 45)
     private String email;
+
+    // Геттеры и сеттеры
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

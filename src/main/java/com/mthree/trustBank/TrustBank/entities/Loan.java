@@ -8,38 +8,34 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "loans")
-public class Loan{
+public class Loan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_loan")
     private int loanId;
 
-    @NotNull
-    @Column(name = "client_id")
-    private int clientId;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
+    private BankAccount account;
 
-    @NotNull
-    @Column(name = "account_id")
-    private int accountId;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
-    @NotNull
-    @Column(name = "loan_amount", precision = 15, scale = 2)
+    @Column(name = "loan_amount", precision = 15, scale = 2, nullable = false)
     private BigDecimal loanAmount;
 
-    @NotNull
-    @Column(name = "interest_rate", precision = 5, scale = 2)
+    @Column(name = "interest_rate", precision = 5, scale = 2, nullable = false)
     private BigDecimal interestRate;
 
-    @NotNull
-    @Column(name = "term")
-    private Date term;
+    @Column(name = "term", nullable = false)
+    private int term;
 
-    @NotNull
     @Column(name = "interest_accured", precision = 15, scale = 2)
     private BigDecimal interestAccrued;
 
-
+    // Геттеры и сеттеры
     public int getLoanId() {
         return loanId;
     }
@@ -48,20 +44,12 @@ public class Loan{
         this.loanId = loanId;
     }
 
-    public int getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
-    }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public BigDecimal getLoanAmount() {
@@ -80,11 +68,11 @@ public class Loan{
         this.interestRate = interestRate;
     }
 
-    public Date getTerm() {
+    public int getTerm() {
         return term;
     }
 
-    public void setTerm(Date term) {
+    public void setTerm(int term) {
         this.term = term;
     }
 
