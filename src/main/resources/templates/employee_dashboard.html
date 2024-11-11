@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .dashboard-container h1 {
+            text-align: center;
+            color: #333;
+        }
+        .tab-buttons, .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .tab-buttons button, .action-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .tab-buttons button:hover, .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .output {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Панель управления сотрудника</h1>
+
+    <!-- Tabs for navigating different entities -->
+    <div class="tab-buttons">
+        <button onclick="showSection('clients')">Клиенты</button>
+        <button onclick="showSection('accounts')">Аккаунты</button>
+        <button onclick="showSection('cards')">Карты</button>
+        <button onclick="showSection('loans')">Кредиты</button>
+        <button onclick="showSection('transactions')">Транзакции</button>
+    </div>
+
+    <!-- Clients Section -->
+    <div id="clients" class="form-section">
+        <h2>Клиенты</h2>
+        <form id="clientForm">
+            <input type="text" name="firstName" placeholder="Имя">
+            <input type="text" name="lastName" placeholder="Фамилия">
+            <input type="date" name="dateOfBirth" placeholder="Дата рождения">
+            <input type="text" name="phone" placeholder="Телефон">
+            <input type="email" name="email" placeholder="Email">
+            <input type="text" name="city" placeholder="Город">
+            <input type="text" name="address" placeholder="Адрес">
+            <input type="text" name="citizenship" placeholder="Гражданство">
+            <button type="button" onclick="createClient()">Добавить клиента</button>
+        </form>
+        <div class="output" id="clientOutput"></div>
+    </div>
+
+    <!-- Accounts Section -->
+    <div id="accounts" class="form-section">
+        <h2>Аккаунты</h2>
+        <form id="accountForm">
+            <input type="number" name="clientId" placeholder="ID клиента">
+            <input type="number" name="accountTypeId" placeholder="Тип аккаунта">
+            <input type="text" name="accountNumber" placeholder="Номер аккаунта">
+            <input type="number" name="balance" placeholder="Баланс">
+            <button type="button" onclick="createAccount()">Добавить аккаунт</button>
+        </form>
+        <div class="output" id="accountOutput"></div>
+    </div>
+
+    <!-- Cards Section -->
+    <div id="cards" class="form-section">
+        <h2>Карты</h2>
+        <form id="cardForm">
+            <input type="number" name="clientId" placeholder="ID клиента">
+            <input type="number" name="accountId" placeholder="ID аккаунта">
+            <input type="text" name="cardNumber" placeholder="Номер карты">
+            <input type="date" name="expirationDate" placeholder="Дата истечения">
+            <button type="button" onclick="createCard()">Добавить карту</button>
+        </form>
+        <div class="output" id="cardOutput"></div>
+    </div>
+
+    <!-- Loans Section -->
+    <div id="loans" class="form-section">
+        <h2>Кредиты</h2>
+        <form id="loanForm">
+            <input type="number" name="accountId" placeholder="ID аккаунта">
+            <input type="number" name="loanAmount" placeholder="Сумма кредита">
+            <input type="number" name="interestRate" placeholder="Процентная ставка">
+            <button type="button" onclick="createLoan()">Добавить кредит</button>
+        </form>
+        <div class="output" id="loanOutput"></div>
+    </div>
+
+    <!-- Transactions Section -->
+    <div id="transactions" class="form-section">
+        <h2>Транзакции</h2>
+        <form id="transactionForm">
+            <input type="number" name="accountId" placeholder="ID аккаунта">
+            <input type="number" name="toAccountId" placeholder="ID получателя">
+            <input type="number" name="amount" placeholder="Сумма">
+            <input type="text" name="transactionType" placeholder="Тип транзакции">
+            <button type="button" onclick="createTransaction()">Добавить транзакцию</button>
+        </form>
+        <div class="output" id="transactionOutput"></div>
+    </div>
+</div>
+
+<script>
+    function showSection(section) {
+        document.querySelectorAll('.form-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(section).classList.add('active');
+    }
+
+    function createClient() {
+        const form = document.getElementById('clientForm');
+        const data = new FormData(form);
+        axios.post('/api/clients', Object.fromEntries(data))
+            .then(response => document.getElementById('clientOutput').innerHTML = 'Клиент добавлен: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createAccount() {
+        const form = document.getElementById('accountForm');
+        const data = new FormData(form);
+        axios.post('/api/accounts', Object.fromEntries(data))
+            .then(response => document.getElementById('accountOutput').innerHTML = 'Аккаунт добавлен: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createCard() {
+        const form = document.getElementById('cardForm');
+        const data = new FormData(form);
+        axios.post('/api/cards', Object.fromEntries(data))
+            .then(response => document.getElementById('cardOutput').innerHTML = 'Карта добавлена: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createLoan() {
+        const form = document.getElementById('loanForm');
+        const data = new FormData(form);
+        axios.post('/api/loans', Object.fromEntries(data))
+            .then(response => document.getElementById('loanOutput').innerHTML = 'Кредит добавлен: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createTransaction() {
+        const form = document.getElementById('transactionForm');
+        const data = new FormData(form);
+        axios.post('/api/transactions', Object.fromEntries(data))
+            .then(response => document.getElementById('transactionOutput').innerHTML = 'Транзакция добавлена: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+</script>
+
+</body>
+</html>

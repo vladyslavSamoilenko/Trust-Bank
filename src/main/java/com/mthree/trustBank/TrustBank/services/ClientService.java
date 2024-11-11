@@ -25,29 +25,33 @@ public class ClientService {
     }
 
     public ClientDTO getClientById(int id) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
-        return convertToDTO(client);
+        return clientRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
     public ClientDTO createClient(ClientDTO clientDTO) {
         Client client = convertToEntity(clientDTO);
-        client = clientRepository.save(client);
-        return convertToDTO(client);
+        Client savedClient = clientRepository.save(client);
+        return convertToDTO(savedClient);
     }
 
     public ClientDTO updateClient(int id, ClientDTO clientDTO) {
-        Client existingClient = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
-        existingClient.setFirstName(clientDTO.getFirstName());
-        existingClient.setLastName(clientDTO.getLastName());
-        // Update other fields as necessary
-        existingClient = clientRepository.save(existingClient);
-        return convertToDTO(existingClient);
+        return clientRepository.findById(id).map(existingClient -> {
+            existingClient.setFirstName(clientDTO.getFirstName());
+            existingClient.setLastName(clientDTO.getLastName());
+            // Update other fields
+            Client updatedClient = clientRepository.save(existingClient);
+            return convertToDTO(updatedClient);
+        }).orElse(null);
     }
 
-    public void deleteClient(int id) {
-        clientRepository.deleteById(id);
+    public boolean deleteClient(int id) {
+        if (clientRepository.existsById(id)) {
+            clientRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     private ClientDTO convertToDTO(Client client) {
@@ -55,7 +59,12 @@ public class ClientService {
         dto.setClientId(client.getClientId());
         dto.setFirstName(client.getFirstName());
         dto.setLastName(client.getLastName());
-        // Map other fields as necessary
+        dto.setDateOfBirth(client.getDateOfBirthday());
+        dto.setPhone(client.getPhone());
+        dto.setEmail(client.getEmail());
+        dto.setCity(client.getCity());
+        dto.setAddress(client.getAddress()); // Add this line
+        dto.setCitizenship(client.getCitizenship());
         return dto;
     }
 
@@ -63,7 +72,12 @@ public class ClientService {
         Client client = new Client();
         client.setFirstName(dto.getFirstName());
         client.setLastName(dto.getLastName());
-        // Map other fields as necessary
+        client.setDateOfBirthday(dto.getDateOfBirth());
+        client.setPhone(dto.getPhone());
+        client.setEmail(dto.getEmail());
+        client.setCity(dto.getCity());
+        client.setAddress(dto.getAddress()); // Убедитесь, что эта строка присутствует
+        client.setCitizenship(dto.getCitizenship());
         return client;
     }
 }
