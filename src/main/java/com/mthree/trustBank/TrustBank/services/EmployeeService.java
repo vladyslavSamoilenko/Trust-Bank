@@ -59,6 +59,8 @@ public class EmployeeService {
         dto.setIdEmployee(employee.getIdEmployee());
         dto.setFirstName(employee.getFirstName());
         dto.setLastName(employee.getLastName());
+        dto.setTelephoneNumber(employee.getTelephoneNumber()); // Ensure this is included
+        dto.setEmail(employee.getEmail());
         return dto;
     }
 
@@ -66,6 +68,8 @@ public class EmployeeService {
         Employee employee = new Employee();
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
+        employee.setEmail(dto.getEmail());              // Add this line
+        employee.setTelephoneNumber(dto.getTelephoneNumber()); // Add this line
         return employee;
     }
 }

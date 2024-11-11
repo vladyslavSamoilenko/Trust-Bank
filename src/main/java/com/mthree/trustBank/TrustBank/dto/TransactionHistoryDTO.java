@@ -1,15 +1,30 @@
 package com.mthree.trustBank.TrustBank.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class TransactionHistoryDTO {
     private int transactionId;
+
+    @NotNull(message = "Account ID is mandatory")
     private int accountId;
+
+    @NotNull(message = "To Account ID is mandatory")
     private int toAccountId;
+
+    @NotNull(message = "Amount is mandatory")
     private BigDecimal amount;
+
+    @NotBlank(message = "Transaction type is mandatory")
     private String transactionType;
+
+    @NotNull(message = "Transaction time is mandatory")
     private Date transactionTime;
+
+    @NotBlank(message = "Description is mandatory")
     private String description;
 
     public int getTransactionId() {

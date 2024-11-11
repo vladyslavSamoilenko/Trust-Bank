@@ -56,16 +56,30 @@ public class TransactionHistoryService {
         TransactionHistoryDTO dto = new TransactionHistoryDTO();
         dto.setTransactionId(transaction.getTransactionId());
         dto.setAccountId(transaction.getAccount().getAccountId());
-        // Map other fields as necessary
+        dto.setToAccountId(transaction.getToAccount().getAccountId());
+        dto.setAmount(transaction.getAmount());
+        dto.setTransactionType(transaction.getTransactionType().toString());
+        dto.setTransactionTime(transaction.getTransactionTime());
+        dto.setDescription(transaction.getDescription());
         return dto;
     }
 
     private TransactionHistory convertToEntity(TransactionHistoryDTO dto) {
         TransactionHistory transaction = new TransactionHistory();
+
         Account account = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
+        Account toAccount = accountRepository.findById(dto.getToAccountId())
+                .orElseThrow(() -> new RuntimeException("To Account not found"));
+
         transaction.setAccount(account);
+        transaction.setToAccount(toAccount);
+
         transaction.setAmount(dto.getAmount());
+        transaction.setTransactionType(TransactionHistory.TransactionType.valueOf(dto.getTransactionType().toUpperCase()));
+        transaction.setTransactionTime(dto.getTransactionTime());
+        transaction.setDescription(dto.getDescription());
+
         return transaction;
     }
 }

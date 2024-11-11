@@ -2,6 +2,7 @@ package com.mthree.trustBank.TrustBank.controllers;
 
 import com.mthree.trustBank.TrustBank.dto.TransactionHistoryDTO;
 import com.mthree.trustBank.TrustBank.services.TransactionHistoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class TransactionHistoryController {
     }
 
     @PostMapping
-    public TransactionHistoryDTO createTransaction(@RequestBody TransactionHistoryDTO transactionDTO) {
+    public TransactionHistoryDTO createTransaction(@Valid @RequestBody TransactionHistoryDTO transactionDTO) {
         return transactionHistoryService.createTransaction(transactionDTO);
     }
 

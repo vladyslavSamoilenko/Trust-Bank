@@ -1,14 +1,23 @@
 package com.mthree.trustBank.TrustBank.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class LoanDTO {
+
+    @NotNull
     private int idLoan;
+    @NotNull
     private int accountId;
+    @NotNull
     private BigDecimal loanAmount;
+    @NotNull
     private BigDecimal interestRate;
+    @NotNull
     private Date term;
+    @NotNull
     private BigDecimal interestAccrued;
 
     public int getIdLoan() {

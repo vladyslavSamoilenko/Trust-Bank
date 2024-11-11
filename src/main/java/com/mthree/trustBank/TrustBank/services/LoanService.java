@@ -10,6 +10,8 @@ import com.mthree.trustBank.TrustBank.repositories.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,7 @@ public class LoanService {
     public LoanDTO getLoanById(int id) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
+        System.out.println("Loaded loan: " + loan); // Debugging line
         return convertToDTO(loan);
     }
 
@@ -45,8 +48,10 @@ public class LoanService {
     public LoanDTO updateLoan(int id, LoanDTO loanDTO) {
         Loan existingLoan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
-        existingLoan.setLoanAmount(loanDTO.getLoanAmount());
-        // Update other fields as necessary
+        existingLoan.setLoanAmount(loanDTO.getLoanAmount() != null ? loanDTO.getLoanAmount() : existingLoan.getLoanAmount());
+        existingLoan.setInterestRate(loanDTO.getInterestRate() != null ? loanDTO.getInterestRate() : existingLoan.getInterestRate());
+        existingLoan.setTerm(loanDTO.getTerm() != null ? loanDTO.getTerm() : existingLoan.getTerm());
+        existingLoan.setInterestAccrued(loanDTO.getInterestAccrued() != null ? loanDTO.getInterestAccrued() : existingLoan.getInterestAccrued());
         existingLoan = loanRepository.save(existingLoan);
         return convertToDTO(existingLoan);
     }
@@ -59,7 +64,10 @@ public class LoanService {
         LoanDTO dto = new LoanDTO();
         dto.setIdLoan(loan.getIdLoan());
         dto.setAccountId(loan.getAccount().getAccountId());
-        // Map other fields as necessary
+        dto.setLoanAmount(loan.getLoanAmount());
+        dto.setInterestRate(loan.getInterestRate());
+        dto.setTerm(loan.getTerm());
+        dto.setInterestAccrued(loan.getInterestAccrued());
         return dto;
     }
 
@@ -68,7 +76,10 @@ public class LoanService {
         Account account = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
         loan.setAccount(account);
-        loan.setLoanAmount(dto.getLoanAmount());
+        loan.setLoanAmount(dto.getLoanAmount() != null ? dto.getLoanAmount() : BigDecimal.ZERO); // Default to 0 if null
+        loan.setInterestRate(dto.getInterestRate() != null ? dto.getInterestRate() : BigDecimal.ZERO); // Default to 0 if null
+        loan.setTerm(dto.getTerm() != null ? dto.getTerm() : new Date(System.currentTimeMillis())); // Default to current date if null
+        loan.setInterestAccrued(dto.getInterestAccrued() != null ? dto.getInterestAccrued() : BigDecimal.ZERO); // Default to 0 if null
         return loan;
     }
 }

@@ -34,7 +34,7 @@ public class Card {
     private Date expirationDate;
 
     @Column(name = "cvv", nullable = false)
-    private int cvv;
+     private int cvv;
 
     // Getters and Setters
 
