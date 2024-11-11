@@ -10,6 +10,7 @@ import java.sql.Date;
 public class Account {
 
     @Id
+    @Column(name = "account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountId;
 
@@ -21,13 +22,13 @@ public class Account {
     @JoinColumn(name = "account_type", nullable = false)
     private AccountType accountType;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
     private BigDecimal balance;
 
-    @Column(nullable = false)
+    @Column(name = "opened_date", nullable = false)
     private Date openedDate;
 
-    @Column(nullable = false, length = 26, unique = true)
+    @Column(name = "account_number", nullable = false, unique = true, length = 26)
     private String accountNumber;
 
     // Getters and Setters

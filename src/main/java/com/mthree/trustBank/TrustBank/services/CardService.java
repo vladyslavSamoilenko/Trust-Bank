@@ -53,6 +53,8 @@ public class CardService {
         Card existingCard = cardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
         existingCard.setCardNumber(cardDTO.getCardNumber());
+        existingCard.setExpirationDate(cardDTO.getExpirationDate());
+        existingCard.setCvv(cardDTO.getCvv());
         // Update other fields as necessary
         existingCard = cardRepository.save(existingCard);
         return convertToDTO(existingCard);
@@ -66,7 +68,11 @@ public class CardService {
         CardDTO dto = new CardDTO();
         dto.setCardId(card.getCardId());
         dto.setClientId(card.getClient().getClientId());
-        // Map other fields as necessary
+        dto.setAccountId(card.getAccount().getAccountId());
+        dto.setCardTypeId(card.getCardType().getCardTypeId());
+        dto.setCardNumber(card.getCardNumber());
+        dto.setExpirationDate(card.getExpirationDate());
+        dto.setCvv(card.getCvv());
         return dto;
     }
 
@@ -81,6 +87,9 @@ public class CardService {
         card.setClient(client);
         card.setAccount(account);
         card.setCardType(cardType);
+        card.setCardNumber(dto.getCardNumber());
+        card.setExpirationDate(dto.getExpirationDate());
+        card.setCvv(dto.getCvv());
         return card;
     }
 }

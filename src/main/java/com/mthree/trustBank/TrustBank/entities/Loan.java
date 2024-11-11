@@ -12,22 +12,25 @@ public class Loan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_loan")
     private int idLoan;
 
+    // Foreign key column for `account_id`
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "loan_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal loanAmount;
 
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(name = "interest_rate", nullable = false, precision = 5, scale = 2)
     private BigDecimal interestRate;
 
-    @Column(nullable = false)
+    @Column(name = "term", nullable = false)
     private Date term;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    // Corrected to match the database column name
+    @Column(name = "interest_accured", nullable = false, precision = 15, scale = 2)
     private BigDecimal interestAccrued;
 
     // Getters and Setters

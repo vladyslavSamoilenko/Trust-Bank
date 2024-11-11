@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
+
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
     private final AccountTypeRepository accountTypeRepository;
@@ -46,7 +47,12 @@ public class AccountService {
         Account existingAccount = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
         existingAccount.setBalance(accountDTO.getBalance());
-        // Set other fields here
+        // Update other fields if needed, such as account type and account number
+        existingAccount.setAccountNumber(accountDTO.getAccountNumber());
+        AccountType accountType = accountTypeRepository.findById(accountDTO.getAccountTypeId())
+                .orElseThrow(() -> new RuntimeException("Account type not found"));
+        existingAccount.setAccountType(accountType);
+
         existingAccount = accountRepository.save(existingAccount);
         return convertToDTO(existingAccount);
     }
@@ -59,20 +65,30 @@ public class AccountService {
         AccountDTO dto = new AccountDTO();
         dto.setAccountId(account.getAccountId());
         dto.setClientId(account.getClient().getClientId());
+        dto.setAccountTypeId(account.getAccountType().getId());
         dto.setBalance(account.getBalance());
         dto.setOpenedDate(account.getOpenedDate());
+        dto.setAccountNumber(account.getAccountNumber()); // Add account number to DTO
         return dto;
     }
 
     private Account convertToEntity(AccountDTO dto) {
         Account account = new Account();
+
+        // Retrieve and set the client from the repository
         Client client = clientRepository.findById(dto.getClientId())
                 .orElseThrow(() -> new RuntimeException("Client not found"));
+        account.setClient(client);
+
+        // Retrieve and set the account type from the repository
         AccountType accountType = accountTypeRepository.findById(dto.getAccountTypeId())
                 .orElseThrow(() -> new RuntimeException("Account type not found"));
-        account.setClient(client);
         account.setAccountType(accountType);
+
         account.setBalance(dto.getBalance());
+        account.setOpenedDate(dto.getOpenedDate());
+        account.setAccountNumber(dto.getAccountNumber()); // Set the account number in the entity
+
         return account;
     }
 }

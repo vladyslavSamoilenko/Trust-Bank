@@ -12,6 +12,7 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "card_id")
     private int cardId;
 
     @ManyToOne
@@ -22,17 +23,17 @@ public class Card {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @Column(nullable = false, length = 16, unique = true)
+    @Column(name = "card_number", nullable = false, unique = true, length = 16)
     private String cardNumber;
 
     @ManyToOne
     @JoinColumn(name = "card_type", nullable = false)
     private CardType cardType;
 
-    @Column(nullable = false)
+    @Column(name = "expiration_date", nullable = false)
     private Date expirationDate;
 
-    @Column(nullable = false)
+    @Column(name = "cvv", nullable = false)
     private int cvv;
 
     // Getters and Setters
