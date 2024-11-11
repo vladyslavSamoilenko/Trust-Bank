@@ -1,10 +1,8 @@
 package com.mthree.trustBank.TrustBank.controllers;
 
-import com.mthree.trustBank.TrustBank.entities.Loan;
+import com.mthree.trustBank.TrustBank.dto.LoanDTO;
 import com.mthree.trustBank.TrustBank.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,35 +11,31 @@ import java.util.List;
 @RequestMapping("/api/loans")
 public class LoanController {
 
-    private final LoanService loanService;
-
     @Autowired
-    public LoanController(LoanService loanService) {
-        this.loanService = loanService;
-    }
+    private LoanService loanService;
 
-    // Получить все кредиты
     @GetMapping
-    public ResponseEntity<List<Loan>> getAllLoans() {
-        return new ResponseEntity<>(loanService.getAllLoans(), HttpStatus.OK);
+    public List<LoanDTO> getAllLoans() {
+        return loanService.getAllLoans();
     }
 
-    // Получить кредит по ID
     @GetMapping("/{id}")
-    public ResponseEntity<Loan> getLoanById(@PathVariable int id) {
-        return new ResponseEntity<>(loanService.getLoanById(id), HttpStatus.OK);
+    public LoanDTO getLoanById(@PathVariable int id) {
+        return loanService.getLoanById(id);
     }
 
-    // Создать новый кредит для клиента
-    @PostMapping("/client/{clientId}")
-    public ResponseEntity<Loan> createLoanForClient(@PathVariable int clientId, @RequestBody Loan loan) {
-        return new ResponseEntity<>(loanService.createLoan(clientId, loan), HttpStatus.CREATED);
+    @PostMapping
+    public LoanDTO createLoan(@RequestBody LoanDTO loanDTO) {
+        return loanService.createLoan(loanDTO);
     }
 
-    // Удалить кредит
+    @PutMapping("/{id}")
+    public LoanDTO updateLoan(@PathVariable int id, @RequestBody LoanDTO loanDTO) {
+        return loanService.updateLoan(id, loanDTO);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLoan(@PathVariable int id) {
+    public void deleteLoan(@PathVariable int id) {
         loanService.deleteLoan(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

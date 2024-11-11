@@ -1,49 +1,74 @@
 package com.mthree.trustBank.TrustBank.services;
 
+import com.mthree.trustBank.TrustBank.dto.LoanDTO;
+import com.mthree.trustBank.TrustBank.entities.Account;
 import com.mthree.trustBank.TrustBank.entities.Client;
 import com.mthree.trustBank.TrustBank.entities.Loan;
+import com.mthree.trustBank.TrustBank.repositories.AccountRepository;
 import com.mthree.trustBank.TrustBank.repositories.ClientRepository;
 import com.mthree.trustBank.TrustBank.repositories.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
 
     private final LoanRepository loanRepository;
-    private final ClientRepository clientRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    public LoanService(LoanRepository loanRepository, ClientRepository clientRepository) {
+    public LoanService(LoanRepository loanRepository, AccountRepository accountRepository) {
         this.loanRepository = loanRepository;
-        this.clientRepository = clientRepository;
+        this.accountRepository = accountRepository;
     }
 
-    // Получить все кредиты
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
+    public List<LoanDTO> getAllLoans() {
+        return loanRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    // Найти кредит по ID
-    public Loan getLoanById(int id) {
-        return loanRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Кредит с ID " + id + " не найден"));
-    }
-
-    // Создать новый кредит для клиента
-    public Loan createLoan(int clientId, Loan loan) {
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Клиент с ID " + clientId + " не найден"));
-        loan.setClient(client);
-        return loanRepository.save(loan);
-    }
-
-    // Удалить кредит
-    public void deleteLoan(int id) {
+    public LoanDTO getLoanById(int id) {
         Loan loan = loanRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Кредит с ID " + id + " не найден"));
-        loanRepository.delete(loan);
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+        return convertToDTO(loan);
+    }
+
+    public LoanDTO createLoan(LoanDTO loanDTO) {
+        Loan loan = convertToEntity(loanDTO);
+        loan = loanRepository.save(loan);
+        return convertToDTO(loan);
+    }
+
+    public LoanDTO updateLoan(int id, LoanDTO loanDTO) {
+        Loan existingLoan = loanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+        existingLoan.setLoanAmount(loanDTO.getLoanAmount());
+        // Update other fields as necessary
+        existingLoan = loanRepository.save(existingLoan);
+        return convertToDTO(existingLoan);
+    }
+
+    public void deleteLoan(int id) {
+        loanRepository.deleteById(id);
+    }
+
+    private LoanDTO convertToDTO(Loan loan) {
+        LoanDTO dto = new LoanDTO();
+        dto.setIdLoan(loan.getIdLoan());
+        dto.setAccountId(loan.getAccount().getAccountId());
+        // Map other fields as necessary
+        return dto;
+    }
+
+    private Loan convertToEntity(LoanDTO dto) {
+        Loan loan = new Loan();
+        Account account = accountRepository.findById(dto.getAccountId())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+        loan.setAccount(account);
+        loan.setLoanAmount(dto.getLoanAmount());
+        return loan;
     }
 }

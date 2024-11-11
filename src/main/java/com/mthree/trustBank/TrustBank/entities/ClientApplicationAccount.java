@@ -11,27 +11,26 @@ import lombok.Setter;
 public class ClientApplicationAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_client")
-    private int clientId;
+    private int idClient;
 
-    @Column(name = "username", length = 45, nullable = false)
+    @Column(nullable = false, length = 45, unique = true)
     private String username;
 
-    @Column(name = "password", length = 200, nullable = false)
+    @Column(nullable = false, length = 200)
     private String password;
 
     @OneToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @JoinColumn(name = "id_client", referencedColumnName = "clientId")
     private Client client;
 
-    // Геттеры и сеттеры
-    public int getClientId() {
-        return clientId;
+    // Getters and Setters
+
+    public int getIdClient() {
+        return idClient;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
     }
 
     public String getUsername() {

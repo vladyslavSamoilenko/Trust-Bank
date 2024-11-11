@@ -4,33 +4,19 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 public class LoanDTO {
-    private int clientId;
+    private int idLoan;
     private int accountId;
     private BigDecimal loanAmount;
     private BigDecimal interestRate;
     private Date term;
     private BigDecimal interestAccrued;
 
-    // Default constructor
-    public LoanDTO() {}
-
-    // Parameterized constructor
-    public LoanDTO(int clientId, int accountId, BigDecimal loanAmount, BigDecimal interestRate, Date term, BigDecimal interestAccrued) {
-        this.clientId = clientId;
-        this.accountId = accountId;
-        this.loanAmount = loanAmount;
-        this.interestRate = interestRate;
-        this.term = term;
-        this.interestAccrued = interestAccrued;
+    public int getIdLoan() {
+        return idLoan;
     }
 
-
-    public int getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setIdLoan(int idLoan) {
+        this.idLoan = idLoan;
     }
 
     public int getAccountId() {
@@ -71,18 +57,5 @@ public class LoanDTO {
 
     public void setInterestAccrued(BigDecimal interestAccrued) {
         this.interestAccrued = interestAccrued;
-    }
-
-    @Override
-    public String toString() {
-        return "LoanDTO{" +
-                "loanId=" +
-                ", clientId=" + clientId +
-                ", accountId=" + accountId +
-                ", loanAmount=" + loanAmount +
-                ", interestRate=" + interestRate +
-                ", term=" + term +
-                ", interestAccrued=" + interestAccrued +
-                '}';
     }
 }

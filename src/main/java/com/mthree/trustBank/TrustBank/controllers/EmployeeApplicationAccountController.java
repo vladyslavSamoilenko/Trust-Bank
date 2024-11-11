@@ -1,31 +1,41 @@
 package com.mthree.trustBank.TrustBank.controllers;
 
-import com.mthree.trustBank.TrustBank.entities.EmployeeApplicationAccount;
-import com.mthree.trustBank.TrustBank.services.EmployeeAccountService;
+import com.mthree.trustBank.TrustBank.dto.EmployeeApplicationDTO;
+import com.mthree.trustBank.TrustBank.services.EmployeeApplicationAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/employees/accounts")
+@RequestMapping("/api/employeeApplicationAccounts")
 public class EmployeeApplicationAccountController {
 
-    private final EmployeeAccountService employeesApplicationAccountService;
-
     @Autowired
-    public EmployeeApplicationAccountController(EmployeeAccountService employeesApplicationAccountService) {
-        this.employeesApplicationAccountService = employeesApplicationAccountService;
+    private EmployeeApplicationAccountService employeeApplicationAccountService;
+
+    @GetMapping
+    public List<EmployeeApplicationDTO> getAllEmployeeApplicationAccounts() {
+        return employeeApplicationAccountService.getAllEmployeeApplicationAccounts();
     }
 
-    @PostMapping("/employee/{employeeId}")
-    public ResponseEntity<EmployeeApplicationAccount> createAccountForEmployee(
-            @PathVariable int employeeId, @RequestBody EmployeeApplicationAccount account) {
-        return new ResponseEntity<>(employeesApplicationAccountService.createAccountForEmployee(employeeId, account), HttpStatus.CREATED);
+    @GetMapping("/{id}")
+    public EmployeeApplicationDTO getEmployeeApplicationAccountById(@PathVariable int id) {
+        return employeeApplicationAccountService.getEmployeeApplicationAccountById(id);
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<EmployeeApplicationAccount> getAccountByEmployeeId(@PathVariable int employeeId) {
-        return new ResponseEntity<>(employeesApplicationAccountService.getAccountByEmployeeId(employeeId), HttpStatus.OK);
+    @PostMapping
+    public EmployeeApplicationDTO createEmployeeApplicationAccount(@RequestBody EmployeeApplicationDTO dto) {
+        return employeeApplicationAccountService.createEmployeeApplicationAccount(dto);
+    }
+
+    @PutMapping("/{id}")
+    public EmployeeApplicationDTO updateEmployeeApplicationAccount(@PathVariable int id, @RequestBody EmployeeApplicationDTO dto) {
+        return employeeApplicationAccountService.updateEmployeeApplicationAccount(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEmployeeApplicationAccount(@PathVariable int id) {
+        employeeApplicationAccountService.deleteEmployeeApplicationAccount(id);
     }
 }

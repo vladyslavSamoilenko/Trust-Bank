@@ -7,19 +7,6 @@ public class EmployeeDTO {
     private String telephoneNumber;
     private String email;
 
-    // Default constructor
-    public EmployeeDTO() {}
-
-    // Parameterized constructor
-    public EmployeeDTO(int idEmployee, String firstName, String lastName, String telephoneNumber, String email) {
-        this.idEmployee = idEmployee;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.telephoneNumber = telephoneNumber;
-        this.email = email;
-    }
-
-    // Getters and Setters
     public int getIdEmployee() {
         return idEmployee;
     }
@@ -58,16 +45,5 @@ public class EmployeeDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "EmployeeDTO{" +
-                "idEmployee=" + idEmployee +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", telephoneNumber='" + telephoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 }

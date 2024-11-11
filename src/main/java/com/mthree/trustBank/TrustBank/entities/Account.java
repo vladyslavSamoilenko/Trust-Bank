@@ -1,40 +1,37 @@
 package com.mthree.trustBank.TrustBank.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
 @Table(name = "accounts")
-public class BankAccount {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
     private int accountId;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @Column(name = "account_type", nullable = false)
-    private int accountType;
+    @ManyToOne
+    @JoinColumn(name = "account_type", nullable = false)
+    private AccountType accountType;
 
-    @Column(name = "balance", precision = 10, scale = 2, nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal balance;
 
-    @Column(name = "opened_date")
+    @Column(nullable = false)
     private Date openedDate;
 
-    @Column(name = "client_type")
-    private int clientType;
-
-    @Column(name = "account_number", length = 26, unique = true, nullable = false)
+    @Column(nullable = false, length = 26, unique = true)
     private String accountNumber;
 
-    // Геттеры и сеттеры
+    // Getters and Setters
+
     public int getAccountId() {
         return accountId;
     }
@@ -51,11 +48,11 @@ public class BankAccount {
         this.client = client;
     }
 
-    public int getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(int accountType) {
+    public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
 
@@ -73,14 +70,6 @@ public class BankAccount {
 
     public void setOpenedDate(Date openedDate) {
         this.openedDate = openedDate;
-    }
-
-    public int getClientType() {
-        return clientType;
-    }
-
-    public void setClientType(int clientType) {
-        this.clientType = clientType;
     }
 
     public String getAccountNumber() {

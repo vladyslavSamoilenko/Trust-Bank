@@ -1,10 +1,8 @@
 package com.mthree.trustBank.TrustBank.controllers;
 
-import com.mthree.trustBank.TrustBank.entities.Card;
+import com.mthree.trustBank.TrustBank.dto.CardDTO;
 import com.mthree.trustBank.TrustBank.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,35 +11,31 @@ import java.util.List;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    private final CardService cardService;
-
     @Autowired
-    public CardController(CardService cardService) {
-        this.cardService = cardService;
-    }
+    private CardService cardService;
 
-    // Получить все карты
     @GetMapping
-    public ResponseEntity<List<Card>> getAllCards() {
-        return new ResponseEntity<>(cardService.getAllCards(), HttpStatus.OK);
+    public List<CardDTO> getAllCards() {
+        return cardService.getAllCards();
     }
 
-    // Получить карту по ID
     @GetMapping("/{id}")
-    public ResponseEntity<Card> getCardById(@PathVariable int id) {
-        return new ResponseEntity<>(cardService.getCardById(id), HttpStatus.OK);
+    public CardDTO getCardById(@PathVariable int id) {
+        return cardService.getCardById(id);
     }
 
-    // Создать новую карту для клиента
-    @PostMapping("/client/{clientId}")
-    public ResponseEntity<Card> createCardForClient(@PathVariable int clientId, @RequestBody Card card) {
-        return new ResponseEntity<>(cardService.createCard(clientId, card), HttpStatus.CREATED);
+    @PostMapping
+    public CardDTO createCard(@RequestBody CardDTO cardDTO) {
+        return cardService.createCard(cardDTO);
     }
 
-    // Удалить карту
+    @PutMapping("/{id}")
+    public CardDTO updateCard(@PathVariable int id, @RequestBody CardDTO cardDTO) {
+        return cardService.updateCard(id, cardDTO);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable int id) {
+    public void deleteCard(@PathVariable int id) {
         cardService.deleteCard(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

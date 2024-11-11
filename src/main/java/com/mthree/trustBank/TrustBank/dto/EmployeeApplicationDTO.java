@@ -1,16 +1,20 @@
 package com.mthree.trustBank.TrustBank.dto;
 
+import com.mthree.trustBank.TrustBank.entities.Employee;
+import jakarta.persistence.*;
+
 public class EmployeeApplicationDTO {
+    private int idEmployeesApplicationAccount;
     private String username;
-    private String accountType;
+    private String password;
+    private int employeeId;
 
-    // Default constructor
-    public EmployeeApplicationDTO() {}
+    public int getIdEmployeesApplicationAccount() {
+        return idEmployeesApplicationAccount;
+    }
 
-    // Parameterized constructor
-    public EmployeeApplicationDTO( String username, String accountType) {
-        this.username = username;
-        this.accountType = accountType;
+    public void setIdEmployeesApplicationAccount(int idEmployeesApplicationAccount) {
+        this.idEmployeesApplicationAccount = idEmployeesApplicationAccount;
     }
 
     public String getUsername() {
@@ -21,19 +25,19 @@ public class EmployeeApplicationDTO {
         this.username = username;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "EmployeeApplicationAccountDTO{"+
-                ", username='" + username + '\'' +
-                ", accountType='" + accountType + '\'' +
-                '}';
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 }

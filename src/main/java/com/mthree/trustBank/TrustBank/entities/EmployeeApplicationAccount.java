@@ -7,34 +7,31 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "employees_application_accounts")
+@Table(name = "employees_application_account")
 public class EmployeeApplicationAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_employees_application_account")
-    private int employeeAccountId;
+    private int idEmployeesApplicationAccount;
 
-    @Column(name = "username", length = 45, nullable = false)
+    @Column(nullable = false, length = 45, unique = true)
     private String username;
 
-    @Column(name = "password", length = 200, nullable = false)
+    @Column(nullable = false, length = 200)
     private String password;
 
-    @Column(name = "account_type", length = 10)
-    private String accountType;
-
-    @OneToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id_employee")
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = true)
     private Employee employee;
 
-    // Геттеры и сеттеры
-    public int getEmployeeAccountId() {
-        return employeeAccountId;
+    // Getters and Setters
+
+    public int getIdEmployeesApplicationAccount() {
+        return idEmployeesApplicationAccount;
     }
 
-    public void setEmployeeAccountId(int employeeAccountId) {
-        this.employeeAccountId = employeeAccountId;
+    public void setIdEmployeesApplicationAccount(int idEmployeesApplicationAccount) {
+        this.idEmployeesApplicationAccount = idEmployeesApplicationAccount;
     }
 
     public String getUsername() {
@@ -51,14 +48,6 @@ public class EmployeeApplicationAccount {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
     }
 
     public Employee getEmployee() {

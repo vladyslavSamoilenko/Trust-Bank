@@ -19,43 +19,32 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "client_id")
     private int clientId;
 
-    @Column(name = "first_name", length = 45, nullable = false)
+    @Column(nullable = false, length = 45)
     private String firstName;
 
-    @Column(name = "last_name", length = 45, nullable = false)
+    @Column(nullable = false, length = 45)
     private String lastName;
 
-    @Column(name = "date_of_birthday")
-    private Date dateOfBirth;
+    @Column(nullable = false)
+    private Date dateOfBirthday;
 
-    @Column(name = "phone", length = 13)
+    @Column(nullable = false, length = 13, unique = true)
     private String phone;
 
-    @Column(name = "email", length = 45)
+    @Column(nullable = false, length = 45, unique = true)
     private String email;
 
-    @Column(name = "city", length = 45)
+    @Column(nullable = false, length = 45)
     private String city;
 
-    @Column(name = "address", length = 60)
+    @Column(nullable = false, length = 60)
     private String address;
 
-    @Column(name = "citizenship", length = 45)
+    @Column(nullable = false, length = 45)
     private String citizenship;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BankAccount> accounts;
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Card> cards;
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Loan> loans;
-
-    // Геттеры и сеттеры
     public int getClientId() {
         return clientId;
     }
@@ -80,12 +69,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public Date getDateOfBirthday() {
+        return dateOfBirthday;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirthday(Date dateOfBirthday) {
+        this.dateOfBirthday = dateOfBirthday;
     }
 
     public String getPhone() {
@@ -127,29 +116,4 @@ public class Client {
     public void setCitizenship(String citizenship) {
         this.citizenship = citizenship;
     }
-
-    public List<BankAccount> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<BankAccount> accounts) {
-        this.accounts = accounts;
-    }
-
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
-
-    public List<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(List<Loan> loans) {
-        this.loans = loans;
-    }
 }
-

@@ -12,28 +12,28 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_employee")
-    private int employeeId;
+    private int idEmployee;
 
-    @Column(name = "first_name", length = 45, nullable = false)
+    @Column(nullable = false, length = 45)
     private String firstName;
 
-    @Column(name = "last_name", length = 45, nullable = false)
+    @Column(nullable = false, length = 45)
     private String lastName;
 
-    @Column(name = "telephone_number", length = 45)
+    @Column(nullable = false, length = 45, unique = true)
     private String telephoneNumber;
 
-    @Column(name = "email", length = 45)
+    @Column(nullable = false, length = 45, unique = true)
     private String email;
 
-    // Геттеры и сеттеры
-    public int getEmployeeId() {
-        return employeeId;
+    // Getters and Setters
+
+    public int getIdEmployee() {
+        return idEmployee;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setIdEmployee(int idEmployee) {
+        this.idEmployee = idEmployee;
     }
 
     public String getFirstName() {

@@ -1,5 +1,6 @@
 package com.mthree.trustBank.TrustBank.services;
 
+import com.mthree.trustBank.TrustBank.dto.EmployeeDTO;
 import com.mthree.trustBank.TrustBank.entities.Employee;
 import com.mthree.trustBank.TrustBank.entities.EmployeeApplicationAccount;
 import com.mthree.trustBank.TrustBank.repositories.ClientAccountRepository;
@@ -10,32 +11,61 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    @Autowired
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Employee getEmployeeById(int id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Сотрудник с ID " + id + " не найден"));
+    public EmployeeDTO getEmployeeById(int id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return convertToDTO(employee);
     }
 
-    public Employee createEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = convertToEntity(employeeDTO);
+        employee = employeeRepository.save(employee);
+        return convertToDTO(employee);
+    }
+
+    public EmployeeDTO updateEmployee(int id, EmployeeDTO employeeDTO) {
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        existingEmployee.setFirstName(employeeDTO.getFirstName());
+        existingEmployee.setLastName(employeeDTO.getLastName());
+        // Update other fields as necessary
+        existingEmployee = employeeRepository.save(existingEmployee);
+        return convertToDTO(existingEmployee);
     }
 
     public void deleteEmployee(int id) {
-        Employee employee = getEmployeeById(id);
-        employeeRepository.delete(employee);
+        employeeRepository.deleteById(id);
+    }
+
+    private EmployeeDTO convertToDTO(Employee employee) {
+        EmployeeDTO dto = new EmployeeDTO();
+        dto.setIdEmployee(employee.getIdEmployee());
+        dto.setFirstName(employee.getFirstName());
+        dto.setLastName(employee.getLastName());
+        return dto;
+    }
+
+    private Employee convertToEntity(EmployeeDTO dto) {
+        Employee employee = new Employee();
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        return employee;
     }
 }

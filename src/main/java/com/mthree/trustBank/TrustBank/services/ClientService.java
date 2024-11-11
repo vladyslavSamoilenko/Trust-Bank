@@ -7,54 +7,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
+
     private final ClientRepository clientRepository;
 
-    @Autowired
     public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
-    // Получить всех клиентов
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
+    public List<ClientDTO> getAllClients() {
+        return clientRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    // Найти клиента по ID
-    public Client getClientById(int id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент с ID " + id + " не найден"));
-    }
-
-    // Создать нового клиента
-    public Client createClient(Client client) {
-        return clientRepository.save(client);
-    }
-
-    // Обновить данные клиента
-    public Client updateClient(int id, Client clientDetails) {
+    public ClientDTO getClientById(int id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент с ID " + id + " не найден"));
-
-        client.setFirstName(clientDetails.getFirstName());
-        client.setLastName(clientDetails.getLastName());
-        client.setDateOfBirth(clientDetails.getDateOfBirth());
-        client.setPhone(clientDetails.getPhone());
-        client.setEmail(clientDetails.getEmail());
-        client.setCity(clientDetails.getCity());
-        client.setAddress(clientDetails.getAddress());
-        client.setCitizenship(clientDetails.getCitizenship());
-
-        return clientRepository.save(client);
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+        return convertToDTO(client);
     }
 
-    // Удалить клиента
+    public ClientDTO createClient(ClientDTO clientDTO) {
+        Client client = convertToEntity(clientDTO);
+        client = clientRepository.save(client);
+        return convertToDTO(client);
+    }
+
+    public ClientDTO updateClient(int id, ClientDTO clientDTO) {
+        Client existingClient = clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+        existingClient.setFirstName(clientDTO.getFirstName());
+        existingClient.setLastName(clientDTO.getLastName());
+        // Update other fields as necessary
+        existingClient = clientRepository.save(existingClient);
+        return convertToDTO(existingClient);
+    }
+
     public void deleteClient(int id) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Клиент с ID " + id + " не найден"));
-        clientRepository.delete(client);
+        clientRepository.deleteById(id);
+    }
+
+    private ClientDTO convertToDTO(Client client) {
+        ClientDTO dto = new ClientDTO();
+        dto.setClientId(client.getClientId());
+        dto.setFirstName(client.getFirstName());
+        dto.setLastName(client.getLastName());
+        // Map other fields as necessary
+        return dto;
+    }
+
+    private Client convertToEntity(ClientDTO dto) {
+        Client client = new Client();
+        client.setFirstName(dto.getFirstName());
+        client.setLastName(dto.getLastName());
+        // Map other fields as necessary
+        return client;
     }
 }
-

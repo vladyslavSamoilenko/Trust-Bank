@@ -12,7 +12,6 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_id")
     private int cardId;
 
     @ManyToOne
@@ -20,22 +19,24 @@ public class Card {
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private BankAccount account;
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    @Column(name = "card_number", length = 16, unique = true, nullable = false)
+    @Column(nullable = false, length = 16, unique = true)
     private String cardNumber;
 
-    @Column(name = "card_type", nullable = false)
-    private int cardType;
+    @ManyToOne
+    @JoinColumn(name = "card_type", nullable = false)
+    private CardType cardType;
 
-    @Column(name = "expiration_date")
+    @Column(nullable = false)
     private Date expirationDate;
 
-    @Column(name = "cvv", nullable = false)
+    @Column(nullable = false)
     private int cvv;
 
-    // Геттеры и сеттеры
+    // Getters and Setters
+
     public int getCardId() {
         return cardId;
     }
@@ -52,11 +53,11 @@ public class Card {
         this.client = client;
     }
 
-    public BankAccount getAccount() {
+    public Account getAccount() {
         return account;
     }
 
-    public void setAccount(BankAccount account) {
+    public void setAccount(Account account) {
         this.account = account;
     }
 
@@ -68,11 +69,11 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public int getCardType() {
+    public CardType getCardType() {
         return cardType;
     }
 
-    public void setCardType(int cardType) {
+    public void setCardType(CardType cardType) {
         this.cardType = cardType;
     }
 

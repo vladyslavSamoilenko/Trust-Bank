@@ -1,31 +1,41 @@
 package com.mthree.trustBank.TrustBank.controllers;
 
-import com.mthree.trustBank.TrustBank.entities.ClientApplicationAccount;
+import com.mthree.trustBank.TrustBank.dto.ClientAccountDTO;
 import com.mthree.trustBank.TrustBank.services.ClientApplicationAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/clients/accounts")
+@RequestMapping("/api/clientApplicationAccounts")
 public class ClientApplicationAccountController {
 
-    private final ClientApplicationAccountService clientsApplicationAccountService;
-
     @Autowired
-    public ClientApplicationAccountController(ClientApplicationAccountService clientsApplicationAccountService) {
-        this.clientsApplicationAccountService = clientsApplicationAccountService;
+    private ClientApplicationAccountService clientApplicationAccountService;
+
+    @GetMapping
+    public List<ClientAccountDTO> getAllClientApplicationAccounts() {
+        return clientApplicationAccountService.getAllClientApplicationAccounts();
     }
 
-    @PostMapping("/client/{clientId}")
-    public ResponseEntity<ClientApplicationAccount> createAccountForClient(
-            @PathVariable int clientId, @RequestBody ClientApplicationAccount account) {
-        return new ResponseEntity<>(clientsApplicationAccountService.createAccountForClient(clientId, account), HttpStatus.CREATED);
+    @GetMapping("/{id}")
+    public ClientAccountDTO getClientApplicationAccountById(@PathVariable int id) {
+        return clientApplicationAccountService.getClientApplicationAccountById(id);
     }
 
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<ClientApplicationAccount> getAccountByClientId(@PathVariable int clientId) {
-        return new ResponseEntity<>(clientsApplicationAccountService.getAccountByClientId(clientId), HttpStatus.OK);
+    @PostMapping
+    public ClientAccountDTO createClientApplicationAccount(@RequestBody ClientAccountDTO dto) {
+        return clientApplicationAccountService.createClientApplicationAccount(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ClientAccountDTO updateClientApplicationAccount(@PathVariable int id, @RequestBody ClientAccountDTO dto) {
+        return clientApplicationAccountService.updateClientApplicationAccount(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteClientApplicationAccount(@PathVariable int id) {
+        clientApplicationAccountService.deleteClientApplicationAccount(id);
     }
 }

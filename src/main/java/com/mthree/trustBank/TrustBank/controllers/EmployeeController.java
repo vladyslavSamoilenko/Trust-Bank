@@ -1,12 +1,7 @@
 package com.mthree.trustBank.TrustBank.controllers;
-
-import com.mthree.trustBank.TrustBank.entities.Client;
-import com.mthree.trustBank.TrustBank.entities.Employee;
+import com.mthree.trustBank.TrustBank.dto.EmployeeDTO;
 import com.mthree.trustBank.TrustBank.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,31 +10,31 @@ import java.util.List;
 @RequestMapping("/api/employees")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+    private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
-        return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
+    public EmployeeDTO getEmployeeById(@PathVariable int id) {
+        return employeeService.getEmployeeById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.createEmployee(employeeDTO);
+    }
+
+    @PutMapping("/{id}")
+    public EmployeeDTO updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.updateEmployee(id, employeeDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable int id) {
+    public void deleteEmployee(@PathVariable int id) {
         employeeService.deleteEmployee(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,11 +1,10 @@
 package com.mthree.trustBank.TrustBank.repositories;
 
-import com.mthree.trustBank.TrustBank.entities.Loan;
+import com.mthree.trustBank.TrustBank.entities.CardType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, Integer> { }
+public interface CardTypeRepository extends JpaRepository<CardType, Integer> {
 
+}

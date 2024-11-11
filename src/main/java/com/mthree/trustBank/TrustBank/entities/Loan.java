@@ -12,44 +12,40 @@ public class Loan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_loan")
-    private int loanId;
+    private int idLoan;
 
     @ManyToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
-    private BankAccount account;
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
-
-    @Column(name = "loan_amount", precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal loanAmount;
 
-    @Column(name = "interest_rate", precision = 5, scale = 2, nullable = false)
+    @Column(nullable = false, precision = 5, scale = 2)
     private BigDecimal interestRate;
 
-    @Column(name = "term", nullable = false)
-    private int term;
+    @Column(nullable = false)
+    private Date term;
 
-    @Column(name = "interest_accured", precision = 15, scale = 2)
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal interestAccrued;
 
-    // Геттеры и сеттеры
-    public int getLoanId() {
-        return loanId;
+    // Getters and Setters
+
+    public int getIdLoan() {
+        return idLoan;
     }
 
-    public void setLoanId(int loanId) {
-        this.loanId = loanId;
+    public void setIdLoan(int idLoan) {
+        this.idLoan = idLoan;
     }
 
-    public Client getClient() {
-        return client;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public BigDecimal getLoanAmount() {
@@ -68,11 +64,11 @@ public class Loan {
         this.interestRate = interestRate;
     }
 
-    public int getTerm() {
+    public Date getTerm() {
         return term;
     }
 
-    public void setTerm(int term) {
+    public void setTerm(Date term) {
         this.term = term;
     }
 
