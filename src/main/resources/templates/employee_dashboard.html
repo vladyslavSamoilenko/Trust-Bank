@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления</title>
+    <title>Management system</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
@@ -74,30 +74,29 @@
 <body>
 
 <div class="dashboard-container">
-    <h1>Панель управления сотрудника</h1>
+    <h1>Management system</h1>
 
     <!-- Tabs for navigating different entities -->
     <div class="tab-buttons">
-        <button onclick="showSection('clients')">Клиенты</button>
-        <button onclick="showSection('accounts')">Аккаунты</button>
-        <button onclick="showSection('cards')">Карты</button>
-        <button onclick="showSection('loans')">Кредиты</button>
-        <button onclick="showSection('transactions')">Транзакции</button>
+        <button onclick="showSection('clients')">Clients</button>
+        <button onclick="showSection('accounts')">Bank Accounts</button>
+        <button onclick="showSection('cards')">Cards</button>
+        <button onclick="showSection('loans')">Loans</button>
     </div>
 
     <!-- Clients Section -->
     <div id="clients" class="form-section">
-        <h2>Клиенты</h2>
+        <h2>Clients</h2>
         <form id="clientForm">
-            <input type="text" name="firstName" placeholder="Имя">
-            <input type="text" name="lastName" placeholder="Фамилия">
-            <input type="date" name="dateOfBirth" placeholder="Дата рождения">
-            <input type="text" name="phone" placeholder="Телефон">
+            <input type="text" name="firstName" placeholder="Name">
+            <input type="text" name="lastName" placeholder="Surname">
+            <input type="date" name="dateOfBirth" placeholder="Date of birth">
+            <input type="text" name="phone" placeholder="Phone number">
             <input type="email" name="email" placeholder="Email">
-            <input type="text" name="city" placeholder="Город">
-            <input type="text" name="address" placeholder="Адрес">
-            <input type="text" name="citizenship" placeholder="Гражданство">
-            <button type="button" onclick="createClient()">Добавить клиента</button>
+            <input type="text" name="city" placeholder="City">
+            <input type="text" name="address" placeholder="Address">
+            <input type="text" name="citizenship" placeholder="Citizenship">
+            <button type="button" onclick="createClient()">Add client</button>
         </form>
         <div class="output" id="clientOutput"></div>
     </div>
@@ -105,11 +104,11 @@
     <!-- Accounts Section -->
     <!-- Аккаунты -->
     <div id="accounts" class="form-section">
-        <h2>Создание Аккаунта</h2>
+        <h2>Create account</h2>
         <form id="accountForm">
-            <input type="number" name="clientId" placeholder="ID клиента" required>
-            <input type="number" name="accountTypeId" placeholder="Тип аккаунта" required>
-            <button type="button" onclick="createAccount()">Подтвердить</button>
+            <input type="number" name="clientId" placeholder="Client id" required>
+            <input type="number" name="accountTypeId" placeholder="Account type" required>
+            <button type="button" onclick="createAccount()">Confirm</button>
         </form>
         <div class="output" id="accountOutput"></div>
     </div>
@@ -117,40 +116,27 @@
 
     <!-- Cards Section -->
     <div id="cards" class="form-section">
-        <h2>Карты</h2>
+        <h2>Cards</h2>
         <form id="cardForm">
-            <input type="number" name="clientId" placeholder="ID клиента">
-            <input type="number" name="accountId" placeholder="ID аккаунта">
-            <input type="text" name="cardNumber" placeholder="Номер карты">
-            <input type="date" name="expirationDate" placeholder="Дата истечения">
-            <button type="button" onclick="createCard()">Добавить карту</button>
+            <input type="number" name="clientId" placeholder="Client id">
+            <input type="number" name="accountId" placeholder="Account id">
+            <input type="text" name="cardNumber" placeholder="Card number">
+            <input type="date" name="expirationDate" placeholder="Expiration date">
+            <button type="button" onclick="createCard()">Add card</button>
         </form>
         <div class="output" id="cardOutput"></div>
     </div>
 
     <!-- Loans Section -->
     <div id="loans" class="form-section">
-        <h2>Кредиты</h2>
+        <h2>Loans</h2>
         <form id="loanForm">
-            <input type="number" name="accountId" placeholder="ID аккаунта">
-            <input type="number" name="loanAmount" placeholder="Сумма кредита">
-            <input type="number" name="interestRate" placeholder="Процентная ставка">
-            <button type="button" onclick="createLoan()">Добавить кредит</button>
+            <input type="number" name="accountId" placeholder="Account id">
+            <input type="number" name="loanAmount" placeholder="Amount">
+            <input type="number" name="interestRate" placeholder="interest rate">
+            <button type="button" onclick="createLoan()">Add credit</button>
         </form>
         <div class="output" id="loanOutput"></div>
-    </div>
-
-    <!-- Transactions Section -->
-    <div id="transactions" class="form-section">
-        <h2>Транзакции</h2>
-        <form id="transactionForm">
-            <input type="number" name="accountId" placeholder="ID аккаунта">
-            <input type="number" name="toAccountId" placeholder="ID получателя">
-            <input type="number" name="amount" placeholder="Сумма">
-            <input type="text" name="transactionType" placeholder="Тип транзакции">
-            <button type="button" onclick="createTransaction()">Добавить транзакцию</button>
-        </form>
-        <div class="output" id="transactionOutput"></div>
     </div>
 </div>
 
@@ -164,7 +150,7 @@
         const form = document.getElementById('clientForm');
         const data = new FormData(form);
         axios.post('/api/clients', Object.fromEntries(data))
-            .then(response => document.getElementById('clientOutput').innerHTML = 'Клиент добавлен: ' + JSON.stringify(response.data))
+            .then(response => document.getElementById('clientOutput').innerHTML = 'Client was added: ' + JSON.stringify(response.data))
             .catch(error => console.error(error));
     }
 
@@ -172,7 +158,7 @@
         const form = document.getElementById('accountForm');
         const data = new FormData(form);
         axios.post('/api/accounts', Object.fromEntries(data))
-            .then(response => document.getElementById('accountOutput').innerHTML = 'Аккаунт добавлен: ' + JSON.stringify(response.data))
+            .then(response => document.getElementById('accountOutput').innerHTML = 'Account was added: ' + JSON.stringify(response.data))
             .catch(error => console.error(error));
     }
 
@@ -180,7 +166,7 @@
         const form = document.getElementById('cardForm');
         const data = new FormData(form);
         axios.post('/api/cards', Object.fromEntries(data))
-            .then(response => document.getElementById('cardOutput').innerHTML = 'Карта добавлена: ' + JSON.stringify(response.data))
+            .then(response => document.getElementById('cardOutput').innerHTML = 'Card was added: ' + JSON.stringify(response.data))
             .catch(error => console.error(error));
     }
 
@@ -188,7 +174,7 @@
         const form = document.getElementById('loanForm');
         const data = new FormData(form);
         axios.post('/api/loans', Object.fromEntries(data))
-            .then(response => document.getElementById('loanOutput').innerHTML = 'Кредит добавлен: ' + JSON.stringify(response.data))
+            .then(response => document.getElementById('loanOutput').innerHTML = 'Loan was added: ' + JSON.stringify(response.data))
             .catch(error => console.error(error));
     }
 
@@ -196,9 +182,10 @@
         const form = document.getElementById('transactionForm');
         const data = new FormData(form);
         axios.post('/api/transactions', Object.fromEntries(data))
-            .then(response => document.getElementById('transactionOutput').innerHTML = 'Транзакция добавлена: ' + JSON.stringify(response.data))
+            .then(response => document.getElementById('transactionOutput').innerHTML = 'Transaction was added ' + JSON.stringify(response.data))
             .catch(error => console.error(error));
     }
+
 </script>
 
 </body>

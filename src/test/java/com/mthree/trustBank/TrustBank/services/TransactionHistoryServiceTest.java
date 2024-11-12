@@ -41,7 +41,6 @@ public class TransactionHistoryServiceTest {
         transactionDTO.setAccountId(1);
         transactionDTO.setToAccountId(2);
         transactionDTO.setAmount(BigDecimal.valueOf(100.00));
-        transactionDTO.setTransactionType("TRANSFER");
         transactionDTO.setDescription("Test Transfer");
 
         Account account = new Account();
@@ -55,7 +54,6 @@ public class TransactionHistoryServiceTest {
         savedTransaction.setAccount(account);  // Ensure account is set
         savedTransaction.setToAccount(toAccount);
         savedTransaction.setAmount(transactionDTO.getAmount());
-        savedTransaction.setTransactionType(TransactionHistory.TransactionType.TRANSFER);
         savedTransaction.setDescription(transactionDTO.getDescription());
 
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
@@ -67,7 +65,6 @@ public class TransactionHistoryServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getAccountId());  // Account ID should match
         assertEquals(100.00, result.getAmount().doubleValue());  // Check amount
-        assertEquals("TRANSFER", result.getTransactionType());  // Check transaction type
     }
 
     @Test

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход для клиента</title>
+    <title>Client log in</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
@@ -51,10 +51,10 @@
 <body>
 
 <div class="login-container">
-    <h1>Вход для клиента</h1>
-    <input type="text" id="username" placeholder="Имя пользователя">
-    <input type="password" id="password" placeholder="Пароль">
-    <button onclick="login()">Войти</button>
+    <h1>Client log in</h1>
+    <input type="text" id="username" placeholder="Email">
+    <input type="password" id="password" placeholder="password">
+    <button onclick="login()">Login</button>
     <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
 </div>
 
@@ -73,7 +73,7 @@
                 window.location.href = '/client_dashboard'; // Переход на клиентскую панель
             })
             .catch(error => {
-                document.getElementById('errorMessage').innerText = 'Ошибка входа. Проверьте данные.';
+                document.getElementById('errorMessage').innerText = 'Login error';
                 console.error(error);
             });
     }
