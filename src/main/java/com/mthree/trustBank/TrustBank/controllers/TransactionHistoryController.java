@@ -1,9 +1,11 @@
 package com.mthree.trustBank.TrustBank.controllers;
 
 import com.mthree.trustBank.TrustBank.dto.TransactionHistoryDTO;
+import com.mthree.trustBank.TrustBank.dto.TransferRequest;
 import com.mthree.trustBank.TrustBank.services.TransactionHistoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -121,19 +121,19 @@
             return;
         }
 
-        // Load account information
         axios.get(`/api/accounts/by-client/${clientId}`)
             .then(response => {
                 const accounts = response.data;
                 if (accounts.length > 0) {
-                    const account = accounts[0]; // Если предполагается только один аккаунт, используем первы
+                    const account = accounts[0];
+                    localStorage.setItem('accountNumber', account.accountNumber); // Сохраняем номер счета в localStorage
                     document.getElementById('accountOutput').innerHTML = `
-                    <p><strong>ID счета:</strong> ${account.accountId}</p>
-                    <p><strong>Номер счета:</strong> ${account.accountNumber}</p>
-                    <p><strong>Тип счета:</strong> ${account.accountTypeId}</p>
-                    <p><strong>Баланс:</strong> ${account.balance} руб.</p>
-                    <p><strong>Дата открытия:</strong> ${account.openedDate}</p>
-                `;
+                <p><strong>ID счета:</strong> ${account.accountId}</p>
+                <p><strong>Номер счета:</strong> ${account.accountNumber}</p>
+                <p><strong>Тип счета:</strong> ${account.accountTypeId}</p>
+                <p><strong>Баланс:</strong> ${account.balance} руб.</p>
+                <p><strong>Дата открытия:</strong> ${account.openedDate}</p>
+            `;
                 } else {
                     document.getElementById('accountOutput').innerText = "Нет доступной информации о счете.";
                 }
@@ -215,16 +215,15 @@
     function makeTransfer(event) {
         event.preventDefault();
 
-        const clientId = localStorage.getItem('clientId');
+        const fromAccountNumber = localStorage.getItem('accountNumber'); // Номер счета отправителя из localStorage
         const recipientAccountNumber = document.getElementById('recipientAccountNumber').value;
         const transferAmount = document.getElementById('transferAmount').value;
         const transferDescription = document.getElementById('transferDescription').value;
 
-        axios.post('/api/transactions', {
-            accountId: clientId,
-            toAccountId: recipientAccountNumber,
-            amount: transferAmount,
-            transactionType: "TRANSFER",  // Используйте верхний регистр
+        axios.post('/api/transactions/transfer', {
+            fromAccountNumber: fromAccountNumber,
+            toAccountNumber: recipientAccountNumber,
+            amount: parseFloat(transferAmount),
             description: transferDescription || "Перевод средств"
         })
             .then(response => {
@@ -233,7 +232,7 @@
             })
             .catch(error => {
                 document.getElementById('transferMessage').innerText = "Ошибка перевода. Пожалуйста, проверьте данные.";
-                console.error(error);
+                console.error("Transfer failed:", error);
             });
     }
 </script>

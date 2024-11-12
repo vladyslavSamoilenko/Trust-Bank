@@ -1,14 +1,17 @@
 package com.mthree.trustBank.TrustBank.services;
 
 import com.mthree.trustBank.TrustBank.dto.TransactionHistoryDTO;
+import com.mthree.trustBank.TrustBank.dto.TransferRequest;
 import com.mthree.trustBank.TrustBank.entities.Account;
 import com.mthree.trustBank.TrustBank.entities.TransactionHistory;
 import com.mthree.trustBank.TrustBank.repositories.AccountRepository;
 import com.mthree.trustBank.TrustBank.repositories.TransactionHistoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.sql.Date;
 
 @Service
 public class TransactionHistoryService {
@@ -78,5 +81,37 @@ public class TransactionHistoryService {
         transaction.setDescription(dto.getDescription());
 
         return transaction;
+    }
+
+    public void processTransfer(TransferRequest transferRequest) {
+        // Находим аккаунт отправителя
+        Account fromAccount = accountRepository.findByAccountNumber(transferRequest.getFromAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Sender account not found"));
+
+        // Находим аккаунт получателя
+        Account toAccount = accountRepository.findByAccountNumber(transferRequest.getToAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Recipient account not found"));
+
+        // Проверяем, что у отправителя достаточно средств
+        if (fromAccount.getBalance().compareTo(transferRequest.getAmount()) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }
+
+        // Обновляем балансы
+        fromAccount.setBalance(fromAccount.getBalance().subtract(transferRequest.getAmount()));
+        toAccount.setBalance(toAccount.getBalance().add(transferRequest.getAmount()));
+
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+
+        // Создаем запись в истории транзакций
+        TransactionHistory transaction = new TransactionHistory();
+        transaction.setAccount(fromAccount);
+        transaction.setToAccount(toAccount);
+        transaction.setAmount(transferRequest.getAmount());
+        transaction.setTransactionTime(Date.valueOf(LocalDate.now()));
+        transaction.setDescription(transferRequest.getDescription());
+
+        transactionHistoryRepository.save(transaction);
     }
 }
