@@ -58,7 +58,6 @@ public class TransactionHistoryService {
         dto.setAccountId(transaction.getAccount().getAccountId());
         dto.setToAccountId(transaction.getToAccount().getAccountId());
         dto.setAmount(transaction.getAmount());
-        dto.setTransactionType(transaction.getTransactionType().toString());
         dto.setTransactionTime(transaction.getTransactionTime());
         dto.setDescription(transaction.getDescription());
         return dto;
@@ -74,9 +73,7 @@ public class TransactionHistoryService {
 
         transaction.setAccount(account);
         transaction.setToAccount(toAccount);
-
         transaction.setAmount(dto.getAmount());
-        transaction.setTransactionType(TransactionHistory.TransactionType.valueOf(dto.getTransactionType().toUpperCase()));
         transaction.setTransactionTime(dto.getTransactionTime());
         transaction.setDescription(dto.getDescription());
 

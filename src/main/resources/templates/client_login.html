@@ -4,35 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход для клиента</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 5px 0; }
-        button { width: 100%; padding: 10px; font-size: 16px; cursor: pointer; }
-        .back-link { display: block; margin-top: 10px; font-size: 14px; color: blue; text-decoration: underline; cursor: pointer; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h1 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+
 <div class="login-container">
-    <h2>Вход для клиента</h2>
-    <form id="clientLoginForm">
-        <input type="text" placeholder="Номер клиента" required><br>
-        <input type="password" placeholder="Пароль" required><br>
-        <button type="submit">Войти</button>
-    </form>
-    <span class="back-link" onclick="goBack()">Назад к выбору входа</span>
+    <h1>Вход для клиента</h1>
+    <input type="text" id="username" placeholder="Имя пользователя">
+    <input type="password" id="password" placeholder="Пароль">
+    <button onclick="login()">Войти</button>
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
 </div>
 
 <script>
-    function goBack() {
-        window.location.href = 'login_choice.html';
-    }
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-    document.getElementById('clientLoginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Здесь можно добавить логику авторизации
-        alert('Успешный вход клиента!');
-    });
+        axios.post('/api/clientApplicationAccounts/login', {
+            username: username,
+            password: password
+        })
+            .then(response => {
+                const clientId = response.data.clientId;
+                localStorage.setItem('clientId', clientId); // Сохраняем clientId в localStorage
+                window.location.href = '/client_dashboard'; // Переход на клиентскую панель
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'Ошибка входа. Проверьте данные.';
+                console.error(error);
+            });
+    }
 </script>
+
 </body>
 </html>

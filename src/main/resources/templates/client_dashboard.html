@@ -3,92 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Информация о счете</title>
+    <title>Панель клиента</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; }
-        .container { width: 80%; max-width: 600px; margin: 20px auto; }
-        .account-info, .transaction-history, .transfer-form { background-color: #fff; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 15px; }
-        .account-info h2, .transaction-history h2, .transfer-form h2 { margin-top: 0; }
-        .transaction-list { list-style: none; padding: 0; margin: 0; }
-        .transaction-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
-        .transaction-item:last-child { border-bottom: none; }
-        .transfer-form { display: none; }
-        .transfer-form input { width: 100%; padding: 8px; margin: 8px 0; }
-        .transfer-form button { width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-        .transfer-form button:hover { background-color: #0056b3; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .dashboard-container h1 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .section h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .output {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Информация о счете -->
-    <div class="account-info">
+
+<div class="dashboard-container">
+    <h1>Панель клиента</h1>
+
+    <!-- Account Information Section -->
+    <div class="section" id="accountInfo">
         <h2>Информация о счете</h2>
-        <p><strong>Номер счета:</strong> 85 1020 2906 0000 1902 0486 7133</p>
-        <p><strong>Сальдо:</strong> 337,62 PLN</p>
-        <p><strong>Заблокировано:</strong> -30,00 PLN</p>
-        <p><strong>Доступные средства:</strong> 307,62 PLN</p>
-        <button onclick="toggleTransferForm()">Сделать перевод</button>
+        <div class="output" id="accountOutput">Загрузка данных...</div>
     </div>
 
-    <!-- Форма перевода -->
-    <div class="transfer-form" id="transferForm">
-        <h2>Форма перевода</h2>
-        <label for="recipientAccount">Номер счета получателя:</label>
-        <input type="text" id="recipientAccount" placeholder="Введите номер счета">
-
-        <label for="recipientName">Имя владельца счета:</label>
-        <input type="text" id="recipientName" placeholder="Введите имя владельца">
-
-        <label for="transferAmount">Сумма перевода:</label>
-        <input type="number" id="transferAmount" placeholder="Введите сумму" min="0" step="0.01">
-
-        <button onclick="submitTransfer()">Отправить</button>
+    <!-- Cards Section -->
+    <div class="section" id="cardsInfo">
+        <h2>Мои карты</h2>
+        <div class="output" id="cardsOutput">Загрузка данных...</div>
     </div>
 
-    <!-- История транзакций -->
-    <div class="transaction-history">
+    <!-- Loans Section -->
+    <div class="section" id="loansInfo">
+        <h2>Кредиты</h2>
+        <div class="output" id="loansOutput">Загрузка данных...</div>
+    </div>
+
+    <!-- Transactions History Section -->
+    <div class="section" id="transactionsInfo">
         <h2>История транзакций</h2>
-        <ul class="transaction-list">
-            <li class="transaction-item">
-                <span>Карта: KFC Krakow</span>
-                <span>-43,99 PLN</span>
-            </li>
-            <li class="transaction-item">
-                <span>Карта: Biedronka</span>
-                <span>-16,51 PLN</span>
-            </li>
-            <li class="transaction-item">
-                <span>Карта: Lidl</span>
-                <span>-17,72 PLN</span>
-            </li>
-            <li class="transaction-item">
-                <span>Карта: Kaufland</span>
-                <span>-17,03 PLN</span>
-            </li>
-        </ul>
+        <div class="output" id="transactionsOutput">Загрузка данных...</div>
+    </div>
+
+    <!-- Transfer Section -->
+    <div class="section" id="transferFunds">
+        <h2>Перевод средств</h2>
+        <form id="transferForm" onsubmit="makeTransfer(event)">
+            <div class="form-group">
+                <input type="text" id="recipientAccountNumber" placeholder="Номер счета получателя" required>
+            </div>
+            <div class="form-group">
+                <input type="number" id="transferAmount" placeholder="Сумма перевода" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="transferDescription" placeholder="Описание (необязательно)">
+            </div>
+            <button type="submit">Перевести</button>
+            <div id="transferMessage" style="margin-top: 10px; color: green;"></div>
+        </form>
     </div>
 </div>
 
 <script>
-    // Функция для отображения и скрытия формы перевода
-    function toggleTransferForm() {
-        const form = document.getElementById('transferForm');
-        form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const clientId = localStorage.getItem('clientId');
 
-    // Заглушка для отправки перевода
-    function submitTransfer() {
-        const account = document.getElementById('recipientAccount').value;
-        const name = document.getElementById('recipientName').value;
-        const amount = document.getElementById('transferAmount').value;
-
-        if (account && name && amount) {
-            alert(`Перевод ${amount} PLN на счет ${account} владельцу ${name} успешно отправлен!`);
-            toggleTransferForm(); // скрываем форму после отправки
-        } else {
-            alert("Пожалуйста, заполните все поля.");
+        if (!clientId) {
+            alert("Вы не авторизованы!");
+            window.location.href = "client_login.html";
+            return;
         }
+
+        // Load account information
+        axios.get(`/api/accounts/by-client/${clientId}`)
+            .then(response => {
+                const accounts = response.data;
+                if (accounts.length > 0) {
+                    const account = accounts[0]; // Если предполагается только один аккаунт, используем первы
+                    document.getElementById('accountOutput').innerHTML = `
+                    <p><strong>ID счета:</strong> ${account.accountId}</p>
+                    <p><strong>Номер счета:</strong> ${account.accountNumber}</p>
+                    <p><strong>Тип счета:</strong> ${account.accountTypeId}</p>
+                    <p><strong>Баланс:</strong> ${account.balance} руб.</p>
+                    <p><strong>Дата открытия:</strong> ${account.openedDate}</p>
+                `;
+                } else {
+                    document.getElementById('accountOutput').innerText = "Нет доступной информации о счете.";
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при загрузке аккаунтов:", error);
+                document.getElementById('accountOutput').innerText = "Ошибка при загрузке данных.";
+            });
+
+        // Load cards information
+        axios.get(`/api/cards?clientId=${clientId}`)
+            .then(response => {
+                const cards = response.data;
+                console.log("Cards data:", cards); // Проверка данных
+
+                let cardInfoHtml = "";
+
+                cards.forEach(card => {
+                    cardInfoHtml += `
+                <div>
+                    <p><strong>Card Number:</strong> ${card.cardNumber || 'не указано'}</p>
+                    <p><strong>Expiration Date:</strong> ${card.expirationDate || 'не указано'}</p>
+                    <p><strong>CVV:</strong> ${card.cvv !== undefined ? card.cvv : 'не указано'}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('cardsOutput').innerHTML = cardInfoHtml;
+            })
+            .catch(error => console.error("Error loading card information:", error));
+
+        axios.get(`/api/loans?clientId=${clientId}`)
+            .then(response => {
+                const loans = response.data;
+                let loanInfoHtml = "";
+
+                loans.forEach(loan => {
+                    loanInfoHtml += `
+                <div>
+                    <p><strong>Loan ID:</strong> ${loan.idLoan || 'не указано'}</p>
+                    <p><strong>Loan Amount:</strong> ${loan.loanAmount || 'не указано'}</p>
+                    <p><strong>Interest Rate:</strong> ${loan.interestRate || 'не указано'}</p>
+                    <p><strong>Term:</strong> ${loan.term || 'не указано'}</p>
+                    <p><strong>Interest Accrued:</strong> ${loan.interestAccrued || 'не указано'}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('loansOutput').innerHTML = loanInfoHtml;
+            })
+            .catch(error => console.error("Error loading loan information:", error));
+
+        axios.get(`/api/transactions?clientId=${clientId}`)
+            .then(response => {
+                const transactions = response.data;
+                let transactionInfoHtml = "";
+
+                transactions.forEach(transaction => {
+                    transactionInfoHtml += `
+                <div>
+                    <p><strong>Transaction ID:</strong> ${transaction.transactionId}</p>
+                    <p><strong>From Account ID:</strong> ${transaction.accountId}</p>
+                    <p><strong>To Account ID:</strong> ${transaction.toAccountId}</p>
+                    <p><strong>Amount:</strong> ${transaction.amount}</p>
+                    <p><strong>Transaction Time:</strong> ${transaction.transactionTime}</p>
+                    <p><strong>Description:</strong> ${transaction.description}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('transactionsOutput').innerHTML = transactionInfoHtml;
+            })
+            .catch(error => console.error("Error loading transaction information:", error));
+    });
+
+    function makeTransfer(event) {
+        event.preventDefault();
+
+        const clientId = localStorage.getItem('clientId');
+        const recipientAccountNumber = document.getElementById('recipientAccountNumber').value;
+        const transferAmount = document.getElementById('transferAmount').value;
+        const transferDescription = document.getElementById('transferDescription').value;
+
+        axios.post('/api/transactions', {
+            accountId: clientId,
+            toAccountId: recipientAccountNumber,
+            amount: transferAmount,
+            transactionType: "TRANSFER",  // Используйте верхний регистр
+            description: transferDescription || "Перевод средств"
+        })
+            .then(response => {
+                document.getElementById('transferMessage').innerText = "Перевод успешно выполнен!";
+                document.getElementById('transferForm').reset();
+            })
+            .catch(error => {
+                document.getElementById('transferMessage').innerText = "Ошибка перевода. Пожалуйста, проверьте данные.";
+                console.error(error);
+            });
     }
 </script>
+
 </body>
 </html>

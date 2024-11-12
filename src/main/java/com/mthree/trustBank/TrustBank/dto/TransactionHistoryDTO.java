@@ -18,9 +18,6 @@ public class TransactionHistoryDTO {
     @NotNull(message = "Amount is mandatory")
     private BigDecimal amount;
 
-    @NotBlank(message = "Transaction type is mandatory")
-    private String transactionType;
-
     @NotNull(message = "Transaction time is mandatory")
     private Date transactionTime;
 
@@ -57,14 +54,6 @@ public class TransactionHistoryDTO {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
     }
 
     public Date getTransactionTime() {

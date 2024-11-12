@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход для работника</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { width: 300px; text-align: center; }
+        .login-container { width: 300px; text-align: center; padding: 20px; background: #f7f7f7; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
         input { width: 100%; padding: 10px; margin: 5px 0; }
         button { width: 100%; padding: 10px; font-size: 16px; cursor: pointer; }
         .back-link { display: block; margin-top: 10px; font-size: 14px; color: blue; text-decoration: underline; cursor: pointer; }
@@ -16,11 +17,12 @@
 <div class="login-container">
     <h2>Вход для работника</h2>
     <form id="employeeLoginForm">
-        <input type="text" placeholder="ID работника" required><br>
-        <input type="password" placeholder="Пароль" required><br>
+        <input type="text" id="employeeUsername" placeholder="Имя пользователя" required><br>
+        <input type="password" id="employeePassword" placeholder="Пароль" required><br>
         <button type="submit">Войти</button>
     </form>
     <span class="back-link" onclick="goBack()">Назад к выбору входа</span>
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
 </div>
 
 <script>
@@ -30,8 +32,22 @@
 
     document.getElementById('employeeLoginForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        // Здесь можно добавить логику авторизации
-        alert('Успешный вход работника!');
+        const username = document.getElementById('employeeUsername').value;
+        const password = document.getElementById('employeePassword').value;
+
+        axios.post('/api/employeeApplicationAccounts/login', {
+            username: username,
+            password: password
+        })
+            .then(response => {
+                const employeeId = response.data.employeeId;
+                localStorage.setItem('employeeId', employeeId); // Сохранение employeeId в localStorage
+                window.location.href = '/employee_dashboard'; // Переход на панель работника
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'Ошибка входа. Проверьте данные.';
+                console.error(error);
+            });
     });
 </script>
 </body>

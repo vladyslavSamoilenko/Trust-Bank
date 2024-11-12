@@ -19,10 +19,6 @@ public class ClientApplicationAccount {
     @Column(nullable = false, length = 200)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "id_client", referencedColumnName = "clientId")
-    private Client client;
-
     // Getters and Setters
 
     public int getIdClient() {
@@ -47,13 +43,5 @@ public class ClientApplicationAccount {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 }

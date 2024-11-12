@@ -103,17 +103,17 @@
     </div>
 
     <!-- Accounts Section -->
+    <!-- Аккаунты -->
     <div id="accounts" class="form-section">
-        <h2>Аккаунты</h2>
+        <h2>Создание Аккаунта</h2>
         <form id="accountForm">
-            <input type="number" name="clientId" placeholder="ID клиента">
-            <input type="number" name="accountTypeId" placeholder="Тип аккаунта">
-            <input type="text" name="accountNumber" placeholder="Номер аккаунта">
-            <input type="number" name="balance" placeholder="Баланс">
-            <button type="button" onclick="createAccount()">Добавить аккаунт</button>
+            <input type="number" name="clientId" placeholder="ID клиента" required>
+            <input type="number" name="accountTypeId" placeholder="Тип аккаунта" required>
+            <button type="button" onclick="createAccount()">Подтвердить</button>
         </form>
         <div class="output" id="accountOutput"></div>
     </div>
+
 
     <!-- Cards Section -->
     <div id="cards" class="form-section">

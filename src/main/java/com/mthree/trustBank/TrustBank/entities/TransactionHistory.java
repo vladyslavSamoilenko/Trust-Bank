@@ -24,20 +24,11 @@ public class TransactionHistory {
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TransactionType transactionType;
-
     @Column(nullable = false)
     private Date transactionTime;
 
     @Column(nullable = false, length = 60)
     private String description;
-
-    // Enum for transaction types
-    public enum TransactionType {
-        DEPOSIT, WITHDRAWAL, TRANSFER
-    }
 
     // Getters and Setters
 
@@ -71,14 +62,6 @@ public class TransactionHistory {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public TransactionType getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
     }
 
     public Date getTransactionTime() {

@@ -69,7 +69,7 @@ public class CardService {
         dto.setCardId(card.getCardId());
         dto.setClientId(card.getClient().getClientId());
         dto.setAccountId(card.getAccount().getAccountId());
-        dto.setCardTypeId(card.getCardType().getCardTypeId());
+        dto.setCardTypeId(card.getCardType());
         dto.setCardNumber(card.getCardNumber());
         dto.setExpirationDate(card.getExpirationDate());
         dto.setCvv(card.getCvv());
@@ -78,18 +78,25 @@ public class CardService {
 
     private Card convertToEntity(CardDTO dto) {
         Card card = new Card();
+
+        // Fetch the Client entity
         Client client = clientRepository.findById(dto.getClientId())
                 .orElseThrow(() -> new RuntimeException("Client not found"));
+        card.setClient(client);
+
+        // Fetch the Account entity by account ID
         Account account = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        CardType cardType = cardTypeRepository.findById(dto.getCardTypeId())
-                .orElseThrow(() -> new RuntimeException("Card type not found"));
-        card.setClient(client);
         card.setAccount(account);
-        card.setCardType(cardType);
+
+        // Set cardType directly without fetching from CardTypeRepository
+        card.setCardType(dto.getCardTypeId() != 0 ? dto.getCardTypeId() : 1); // Set default to 1 if not provided
+
+        // Set other fields
         card.setCardNumber(dto.getCardNumber());
         card.setExpirationDate(dto.getExpirationDate());
         card.setCvv(dto.getCvv());
+
         return card;
     }
 }

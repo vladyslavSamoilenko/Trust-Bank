@@ -3,6 +3,8 @@ package com.mthree.trustBank.TrustBank.controllers;
 import com.mthree.trustBank.TrustBank.dto.EmployeeApplicationDTO;
 import com.mthree.trustBank.TrustBank.services.EmployeeApplicationAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +39,14 @@ public class EmployeeApplicationAccountController {
     @DeleteMapping("/{id}")
     public void deleteEmployeeApplicationAccount(@PathVariable int id) {
         employeeApplicationAccountService.deleteEmployeeApplicationAccount(id);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody EmployeeApplicationDTO loginRequest) {
+        EmployeeApplicationDTO employee = employeeApplicationAccountService.authenticateEmployee(loginRequest.getUsername(), loginRequest.getPassword());
+        if (employee != null) {
+            return ResponseEntity.ok(employee);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверное имя пользователя или пароль");
+        }
     }
 }

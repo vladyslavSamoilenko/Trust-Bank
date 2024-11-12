@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,9 +67,16 @@ public class ClientApplicationAccountService {
         ClientApplicationAccount account = new ClientApplicationAccount();
         Client client = clientRepository.findById(dto.getClientId())
                 .orElseThrow(() -> new RuntimeException("Client not found"));
-        account.setClient(client);
         account.setUsername(dto.getUsername());
         account.setPassword(dto.getPassword());
         return account;
+    }
+
+    public Integer authenticate(String username, String password) {
+        Optional<ClientApplicationAccount> account = clientApplicationAccountRepository.findByUsername(username);
+        if (account.isPresent() && account.get().getPassword().equals(password)) {
+            return account.get().getIdClient(); // Возвращаем clientId при успешной аутентификации
+        }
+        return null; // Неправильные учетные данные
     }
 }

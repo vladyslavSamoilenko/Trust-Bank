@@ -70,4 +70,9 @@ public class EmployeeApplicationAccountService {
         account.setPassword(dto.getPassword());
         return account;
     }
+    public EmployeeApplicationDTO authenticateEmployee(String username, String password) {
+        return employeeApplicationAccountRepository.findByUsernameAndPassword(username, password)
+                .map(this::convertToDTO)
+                .orElse(null);
+    }
 }

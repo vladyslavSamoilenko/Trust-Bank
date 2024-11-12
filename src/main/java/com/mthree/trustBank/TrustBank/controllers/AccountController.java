@@ -3,6 +3,7 @@ package com.mthree.trustBank.TrustBank.controllers;
 import com.mthree.trustBank.TrustBank.dto.AccountDTO;
 import com.mthree.trustBank.TrustBank.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,13 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public void deleteAccount(@PathVariable int id) {
         accountService.deleteAccount(id);
+    }
+    @GetMapping("/by-client/{clientId}")
+    public ResponseEntity<List<AccountDTO>> getAccountsByClientId(@PathVariable int clientId) {
+        List<AccountDTO> accounts = accountService.getAccountsByClientId(clientId);
+        if (accounts.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(accounts);
     }
 }

@@ -26,9 +26,9 @@ public class Card {
     @Column(name = "card_number", nullable = false, unique = true, length = 16)
     private String cardNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "card_type", nullable = false)
-    private CardType cardType;
+//    @ManyToOne
+//    @JoinColumn(name = "card_type", nullable = false)
+    private int cardType = 1;
 
     @Column(name = "expiration_date", nullable = false)
     private Date expirationDate;
@@ -70,11 +70,11 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public CardType getCardType() {
+    public int getCardType() {
         return cardType;
     }
 
-    public void setCardType(CardType cardType) {
+    public void setCardType(int cardType) {
         this.cardType = cardType;
     }
 
