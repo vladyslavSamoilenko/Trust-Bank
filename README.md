@@ -1,9 +1,9 @@
-Banking Application Documentation
+# Banking Application Documentation
 
 This project is a web-based banking application designed to support core banking functions,
 including account management, card services, loan management, and transaction history tracking. It provides separate dashboards for clients and employees to efficiently access and manage various banking services.
 
-Project Structure
+# Project Structure
 Controllers: Handle HTTP requests and responses.
 
 Services: Contain business logic for processing data.
@@ -16,7 +16,7 @@ Entities: Database table mappings.
 
 HTML Templates: Frontend interfaces for client and employee dashboards.
 
-Controllers
+# Controllers
 1.1 AccountController
 Manages bank accounts.
 
@@ -50,20 +50,22 @@ PUT /api/cards/{id} - Update a card by ID
 DELETE /api/cards/{id} - Delete a card by ID
 ... (continue for other controllers, following the same structure)
 
-Services
+# Services
 Each service class manages business logic for its respective entity. Key services include:
 
 AccountService: Handles account-related business logic.
 CardService: Manages card-related operations.
 LoanService: Manages loan processing.
 TransactionHistoryService: Validates and processes fund transfers.
-Repositories
+
+# Repositories
 Repositories are interfaces extending JpaRepository for each entity, enabling CRUD operations and custom query methods, such as:
 
 findByAccountNumber in AccountRepository
 findByUsername in ClientAccountRepository
 findByUsernameAndPassword in EmployeeAccountRepository
-DTOs (Data Transfer Objects)
+
+# DTOs (Data Transfer Objects)
 DTOs encapsulate data for transferring between client and server:
 
 AccountDTO: Data for account-related interactions.
@@ -71,7 +73,8 @@ ClientAccountDTO: Data for managing client accounts.
 LoanDTO: Data for loan information.
 TransactionHistoryDTO: Data for transaction history.
 TransferRequest: Data structure for handling fund transfer requests.
-HTML Templates
+
+# HTML Templates
 5.1 client_dashboard.html
 Client dashboard with sections for account information, cards, loans, transaction history, and fund transfers.
 
