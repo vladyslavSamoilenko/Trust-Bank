@@ -1,39 +1,24 @@
-package com.mthree.trustBank.TrustBank.entities;
+package com.mthree.trustBank.TrustBank.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
-@Entity
-@Table(name = "loans")
-public class Loan {
+public class LoanDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_loan")
+    @NotNull
     private int idLoan;
-
-    // Foreign key column for `account_id`
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
-
-    @Column(name = "loan_amount", nullable = false, precision = 15, scale = 2)
+    @NotNull
+    private int accountId;
+    @NotNull
     private BigDecimal loanAmount;
-
-    @Column(name = "interest_rate", nullable = false, precision = 5, scale = 2)
+    @NotNull
     private BigDecimal interestRate;
-
-    @Column(name = "term", nullable = false)
+    @NotNull
     private Date term;
-
-    // Corrected to match the database column name
-    @Column(name = "interest_accured", nullable = false, precision = 15, scale = 2)
+    @NotNull
     private BigDecimal interestAccrued;
-
-    // Getters and Setters
 
     public int getIdLoan() {
         return idLoan;
@@ -43,12 +28,12 @@ public class Loan {
         this.idLoan = idLoan;
     }
 
-    public Account getAccount() {
-        return account;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public BigDecimal getLoanAmount() {

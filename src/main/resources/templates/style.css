@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #006838;
+    padding: 10px 20px;
+    color: #ffffff;
+}
+
+.top-links a {
+    text-align: center;
+    justify-content: center;
+    color: #fff;
+    margin-right: 10px;
+    height: 30px;
+    font-size: 0.9em;
+    text-decoration: none;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 400px;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+    gap: 10px;
+}
+
+.actions button {
+    background-color: #28a745; /* Зеленый цвет фона */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Внутренний отступ */
+    border: none; /* Убираем границу */
+    border-radius: 8px; /* Закругленные углы */
+    font-size: 16px; /* Размер текста */
+    font-family: Arial, sans-serif; /* Шрифт */
+    cursor: pointer; /* Указатель курсора при наведении */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    transition: transform 0.2s; /* Анимация при наведении */
+}
+
+.open-account {
+    background-color: #ff4081;
+    color: #ffffff;
+}
+
+.take-credit {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+.login {
+    background-color: #006838;
+    color: #ffffff;
+    border: 2px solid #fafafa;
+}
+
+.main-content {
+    padding: 0px;
+}
+
+.promo-banner {
+    width: 80%;
+    height:80%;
+}
+
+.promo-text {
+    background-color: rgba(23, 102, 50, 0.7);
+    padding: 20px;
+    max-width: 300px;
+}
+
+.promo-text h1 {
+    font-size: 1.5em;
+    color: #4caf50;
+}
+
+.promo-text p {
+    margin: 10px 0;
+}
+
+.learn-more {
+    background-color: #4caf50;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.services {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.service-item {
+    text-align: center;
+}
+
+.service-item img {
+    height: 50px;
+    margin-bottom: 10px;
+}

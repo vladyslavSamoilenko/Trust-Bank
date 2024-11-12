@@ -1,25 +1,41 @@
 package com.mthree.trustBank.TrustBank.controllers;
+import com.mthree.trustBank.TrustBank.dto.EmployeeDTO;
+import com.mthree.trustBank.TrustBank.services.EmployeeService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import com.mthree.trustBank.TrustBank.entities.Client;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
-    @GetMapping("/login_employee")
-    public String loginPage(){
-        return "auth/html/loginEmployee";
+    @Autowired
+    private EmployeeService employeeService;
+
+    @GetMapping
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/dashboard")
-    public String showDashboard(){
-        return "employee/html/dashboard";
+    @GetMapping("/{id}")
+    public EmployeeDTO getEmployeeById(@PathVariable int id) {
+        return employeeService.getEmployeeById(id);
     }
 
-    @GetMapping("/client_registration")
-    public String clientAccountRegistration(){
-        return "employee/html/client_registration";
+    @PostMapping
+    public EmployeeDTO createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.createEmployee(employeeDTO);
+    }
+
+    @PutMapping("/{id}")
+    public EmployeeDTO updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.updateEmployee(id, employeeDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteEmployee(id);
     }
 }

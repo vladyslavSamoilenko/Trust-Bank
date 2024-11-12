@@ -1,32 +1,11 @@
-package com.mthree.trustBank.TrustBank.entities;
+package com.mthree.trustBank.TrustBank.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
-
-@Entity
-@Table(name = "employees")
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeDTO {
     private int idEmployee;
-
-    @Column(nullable = false, length = 45)
     private String firstName;
-
-    @Column(nullable = false, length = 45)
     private String lastName;
-
-    @Column(nullable = false, length = 45, unique = true)
     private String telephoneNumber;
-
-    @Column(nullable = false, length = 45, unique = true)
     private String email;
-
-    // Getters and Setters
 
     public int getIdEmployee() {
         return idEmployee;

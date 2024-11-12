@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in employee</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { width: 300px; text-align: center; padding: 20px; background: #f7f7f7; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        input { width: 100%; padding: 10px; margin: 5px 0; }
+        button { width: 100%; padding: 10px; font-size: 16px; cursor: pointer; }
+        .back-link { display: block; margin-top: 10px; font-size: 14px; color: blue; text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Employee log in</h2>
+    <form id="employeeLoginForm">
+        <input type="text" id="employeeUsername" placeholder="Work email" required><br>
+        <input type="password" id="employeePassword" placeholder="Password" required><br>
+        <button type="submit">Log in</button>
+    </form>
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+</div>
+
+<script>
+    function goBack() {
+        window.location.href = 'login_choice.html';
+    }
+
+    document.getElementById('employeeLoginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const username = document.getElementById('employeeUsername').value;
+        const password = document.getElementById('employeePassword').value;
+
+        axios.post('/api/employeeApplicationAccounts/login', {
+            username: username,
+            password: password
+        })
+            .then(response => {
+                const employeeId = response.data.employeeId;
+                localStorage.setItem('employeeId', employeeId); // Сохранение employeeId в localStorage
+                window.location.href = '/employee_dashboard'; // Переход на панель работника
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'Login error';
+                console.error(error);
+            });
+    });
+</script>
+</body>
+</html>

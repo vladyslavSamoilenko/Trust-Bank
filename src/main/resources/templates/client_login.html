@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client log in</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h1 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h1>Client log in</h1>
+    <input type="text" id="username" placeholder="Email">
+    <input type="password" id="password" placeholder="password">
+    <button onclick="login()">Login</button>
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+</div>
+
+<script>
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        axios.post('/api/clientApplicationAccounts/login', {
+            username: username,
+            password: password
+        })
+            .then(response => {
+                const clientId = response.data.clientId;
+                localStorage.setItem('clientId', clientId); // Сохраняем clientId в localStorage
+                window.location.href = '/client_dashboard'; // Переход на клиентскую панель
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'Login error';
+                console.error(error);
+            });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management system</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .dashboard-container h1 {
+            text-align: center;
+            color: #333;
+        }
+        .tab-buttons, .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .tab-buttons button, .action-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .tab-buttons button:hover, .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .output {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Management system</h1>
+
+    <!-- Tabs for navigating different entities -->
+    <div class="tab-buttons">
+        <button onclick="showSection('clients')">Clients</button>
+        <button onclick="showSection('accounts')">Bank Accounts</button>
+        <button onclick="showSection('cards')">Cards</button>
+        <button onclick="showSection('loans')">Loans</button>
+    </div>
+
+    <!-- Clients Section -->
+    <div id="clients" class="form-section">
+        <h2>Clients</h2>
+        <form id="clientForm">
+            <input type="text" name="firstName" placeholder="Name">
+            <input type="text" name="lastName" placeholder="Surname">
+            <input type="date" name="dateOfBirth" placeholder="Date of birth">
+            <input type="text" name="phone" placeholder="Phone number">
+            <input type="email" name="email" placeholder="Email">
+            <input type="text" name="city" placeholder="City">
+            <input type="text" name="address" placeholder="Address">
+            <input type="text" name="citizenship" placeholder="Citizenship">
+            <button type="button" onclick="createClient()">Add client</button>
+        </form>
+        <div class="output" id="clientOutput"></div>
+    </div>
+
+    <!-- Accounts Section -->
+    <!-- Аккаунты -->
+    <div id="accounts" class="form-section">
+        <h2>Create account</h2>
+        <form id="accountForm">
+            <input type="number" name="clientId" placeholder="Client id" required>
+            <input type="number" name="accountTypeId" placeholder="Account type" required>
+            <button type="button" onclick="createAccount()">Confirm</button>
+        </form>
+        <div class="output" id="accountOutput"></div>
+    </div>
+
+
+    <!-- Cards Section -->
+    <div id="cards" class="form-section">
+        <h2>Cards</h2>
+        <form id="cardForm">
+            <input type="number" name="clientId" placeholder="Client id">
+            <input type="number" name="accountId" placeholder="Account id">
+            <input type="text" name="cardNumber" placeholder="Card number">
+            <input type="date" name="expirationDate" placeholder="Expiration date">
+            <button type="button" onclick="createCard()">Add card</button>
+        </form>
+        <div class="output" id="cardOutput"></div>
+    </div>
+
+    <!-- Loans Section -->
+    <div id="loans" class="form-section">
+        <h2>Loans</h2>
+        <form id="loanForm">
+            <input type="number" name="accountId" placeholder="Account id">
+            <input type="number" name="loanAmount" placeholder="Amount">
+            <input type="number" name="interestRate" placeholder="interest rate">
+            <button type="button" onclick="createLoan()">Add credit</button>
+        </form>
+        <div class="output" id="loanOutput"></div>
+    </div>
+</div>
+
+<script>
+    function showSection(section) {
+        document.querySelectorAll('.form-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(section).classList.add('active');
+    }
+
+    function createClient() {
+        const form = document.getElementById('clientForm');
+        const data = new FormData(form);
+        axios.post('/api/clients', Object.fromEntries(data))
+            .then(response => document.getElementById('clientOutput').innerHTML = 'Client was added: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createAccount() {
+        const form = document.getElementById('accountForm');
+        const data = new FormData(form);
+        axios.post('/api/accounts', Object.fromEntries(data))
+            .then(response => document.getElementById('accountOutput').innerHTML = 'Account was added: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createCard() {
+        const form = document.getElementById('cardForm');
+        const data = new FormData(form);
+        axios.post('/api/cards', Object.fromEntries(data))
+            .then(response => document.getElementById('cardOutput').innerHTML = 'Card was added: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createLoan() {
+        const form = document.getElementById('loanForm');
+        const data = new FormData(form);
+        axios.post('/api/loans', Object.fromEntries(data))
+            .then(response => document.getElementById('loanOutput').innerHTML = 'Loan was added: ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+    function createTransaction() {
+        const form = document.getElementById('transactionForm');
+        const data = new FormData(form);
+        axios.post('/api/transactions', Object.fromEntries(data))
+            .then(response => document.getElementById('transactionOutput').innerHTML = 'Transaction was added ' + JSON.stringify(response.data))
+            .catch(error => console.error(error));
+    }
+
+</script>
+
+</body>
+</html>

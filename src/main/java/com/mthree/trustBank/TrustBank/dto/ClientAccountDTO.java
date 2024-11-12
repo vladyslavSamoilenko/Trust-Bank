@@ -1,32 +1,24 @@
-package com.mthree.trustBank.TrustBank.entities;
+package com.mthree.trustBank.TrustBank.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
 
-@Entity
-@Table(name = "clients_application_accounts")
-public class ClientApplicationAccount {
+public class ClientAccountDTO {
+    private int clientId;
 
-    @Id
-    private int idClient;
-
-    @Column(nullable = false, length = 45, unique = true)
+    @NotEmpty(message = "Username cannot be empty")
     private String username;
 
-    @Column(nullable = false, length = 200)
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     // Getters and Setters
-
-    public int getIdClient() {
-        return idClient;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public String getUsername() {

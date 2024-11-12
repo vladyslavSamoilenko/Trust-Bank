@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .dashboard-container h1 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .section h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .output {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Панель клиента</h1>
+
+    <!-- Account Information Section -->
+    <div class="section" id="accountInfo">
+        <h2>Account info</h2>
+        <div class="output" id="accountOutput">Loading...</div>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="section" id="cardsInfo">
+        <h2>My cards</h2>
+        <div class="output" id="cardsOutput">Loading...</div>
+    </div>
+
+    <!-- Loans Section -->
+    <div class="section" id="loansInfo">
+        <h2>Loans</h2>
+        <div class="output" id="loansOutput">Loading...</div>
+    </div>
+
+    <!-- Transactions History Section -->
+    <div class="section" id="transactionsInfo">
+        <h2>Transaction history</h2>
+        <div class="output" id="transactionsOutput">Loading...</div>
+    </div>
+
+    <!-- Transfer Section -->
+    <div class="section" id="transferFunds">
+        <h2>Transfer</h2>
+        <form id="transferForm" onsubmit="makeTransfer(event)">
+            <div class="form-group">
+                <input type="text" id="recipientAccountNumber" placeholder="Account number" required>
+            </div>
+            <div class="form-group">
+                <input type="number" id="transferAmount" placeholder="Amount" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="transferDescription" placeholder="Description">
+            </div>
+            <button type="submit">Transfer</button>
+            <div id="transferMessage" style="margin-top: 10px; color: green;"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const clientId = localStorage.getItem('clientId');
+
+        if (!clientId) {
+            alert("you are not authorized!");
+            window.location.href = "client_login.html";
+            return;
+        }
+
+        axios.get(`/api/accounts/by-client/${clientId}`)
+            .then(response => {
+                const accounts = response.data;
+                if (accounts.length > 0) {
+                    const account = accounts[0];
+                    localStorage.setItem('accountNumber', account.accountNumber); // Сохраняем номер счета в localStorage
+                    document.getElementById('accountOutput').innerHTML = `
+                <p><strong>Account id:</strong> ${account.accountId}</p>
+                <p><strong>Account:</strong> ${account.accountNumber}</p>
+                <p><strong>Balance:</strong> ${account.balance} $.</p>
+                <p><strong>Opened Date:</strong> ${account.openedDate}</p>
+            `;
+                } else {
+                    document.getElementById('accountOutput').innerText = "Dont have any info about loan";
+                }
+            })
+            .catch(error => {
+                console.error("Error accounts:", error);
+                document.getElementById('accountOutput').innerText = "Loading error";
+            });
+
+        // Load cards information
+        axios.get(`/api/cards?clientId=${clientId}`)
+            .then(response => {
+                const cards = response.data;
+                console.log("Cards data:", cards); // Проверка данных
+
+                let cardInfoHtml = "";
+
+                cards.forEach(card => {
+                    cardInfoHtml += `
+                <div>
+                    <p><strong>Card Number:</strong> ${card.cardNumber || 'empty'}</p>
+                    <p><strong>Expiration Date:</strong> ${card.expirationDate || 'empty'}</p>
+                    <p><strong>CVV:</strong> ${card.cvv !== undefined ? card.cvv : 'empty'}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('cardsOutput').innerHTML = cardInfoHtml;
+            })
+            .catch(error => console.error("Error loading card information:", error));
+
+        axios.get(`/api/loans?clientId=${clientId}`)
+            .then(response => {
+                const loans = response.data;
+                let loanInfoHtml = "";
+
+                loans.forEach(loan => {
+                    loanInfoHtml += `
+                <div>
+                    <p><strong>Loan ID:</strong> ${loan.idLoan || 'empty'}</p>
+                    <p><strong>Loan Amount:</strong> ${loan.loanAmount || 'empty'}</p>
+                    <p><strong>Interest Rate:</strong> ${loan.interestRate || 'empty'}</p>
+                    <p><strong>Term:</strong> ${loan.term || 'empty'}</p>
+                    <p><strong>Interest Accrued:</strong> ${loan.interestAccrued || 'empty'}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('loansOutput').innerHTML = loanInfoHtml;
+            })
+            .catch(error => console.error("Error loading loan information:", error));
+
+        axios.get(`/api/transactions?clientId=${clientId}`)
+            .then(response => {
+                const transactions = response.data;
+                let transactionInfoHtml = "";
+
+                transactions.forEach(transaction => {
+                    transactionInfoHtml += `
+                <div>
+                    <p><strong>Transaction ID:</strong> ${transaction.transactionId}</p>
+                    <p><strong>From Account ID:</strong> ${transaction.accountId}</p>
+                    <p><strong>To Account ID:</strong> ${transaction.toAccountId}</p>
+                    <p><strong>Amount:</strong> ${transaction.amount}</p>
+                    <p><strong>Transaction Time:</strong> ${transaction.transactionTime}</p>
+                    <p><strong>Description:</strong> ${transaction.description}</p>
+                </div>
+                <hr>
+            `;
+                });
+
+                document.getElementById('transactionsOutput').innerHTML = transactionInfoHtml;
+            })
+            .catch(error => console.error("Error loading transaction information:", error));
+    });
+
+    function makeTransfer(event) {
+        event.preventDefault();
+
+        const fromAccountNumber = localStorage.getItem('accountNumber'); // Номер счета отправителя из localStorage
+        const recipientAccountNumber = document.getElementById('recipientAccountNumber').value;
+        const transferAmount = document.getElementById('transferAmount').value;
+        const transferDescription = document.getElementById('transferDescription').value;
+
+        axios.post('/api/transactions/transfer', {
+            fromAccountNumber: fromAccountNumber,
+            toAccountNumber: recipientAccountNumber,
+            amount: parseFloat(transferAmount),
+            description: transferDescription || "Money transfer"
+        })
+            .then(response => {
+                document.getElementById('transferMessage').innerText = "Transfer success!";
+                document.getElementById('transferForm').reset();
+            })
+            .catch(error => {
+                document.getElementById('transferMessage').innerText = "Transfer error, check your data";
+                console.error("Transfer failed:", error);
+            });
+    }
+</script>
+
+</body>
+</html>
